@@ -91,15 +91,52 @@
         
         .loader { border: 3px solid var(--border-color); border-top: 3px solid #8ab4f8; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* تنسيقات نافذة عرض الصور بكامل الجودة */
+        #lightbox-modal { backdrop-filter: blur(5px); }
+        #lightbox-img { max-width: 95%; max-height: 95%; box-shadow: 0 0 30px rgba(0,0,0,0.8); border-radius: 8px; }
+
+        /* تنسيقات شريط الجمل المحفزة (Marquee) */
+        .marquee-wrapper {
+            width: 100%;
+            overflow: hidden;
+            background-color: #0f172a; /* لون أزرق داكن احترافي */
+            color: #facc15; /* لون أصفر ساطع للكلمات */
+            padding: 8px 0;
+            border-bottom: 2px solid #3b82f6;
+            display: flex;
+            align-items: center;
+            font-size: 15px;
+            font-weight: 700;
+            white-space: nowrap;
+            position: relative;
+            z-index: 50;
+        }
+        .marquee-track {
+            display: inline-block;
+            animation: scroll-marquee 250s linear infinite;
+        }
+        .marquee-track:hover {
+            animation-play-state: paused;
+        }
+        @keyframes scroll-marquee {
+            0% { transform: translateX(100vw); }
+            100% { transform: translateX(-100%); }
+        }
     </style>
 </head>
 <body class="theme-midnight antialiased min-h-screen flex flex-col">
 
+    <!-- نافذة عرض الصور (Lightbox) -->
+    <div id="lightbox-modal" class="hidden-force fixed inset-0 z-[999999] bg-black bg-opacity-95 flex items-center justify-center cursor-pointer" onclick="window.closeLightbox()">
+        <button class="absolute top-5 right-5 text-white text-4xl font-bold hover:text-red-500 cursor-pointer transition">&times;</button>
+        <img id="lightbox-img" src="" class="object-contain" onclick="event.stopPropagation()">
+    </div>
+
     <!-- رسالة تحذير تطبيق ZArchiver -->
     <div id="zarch-warning" style="display: none; background: #dc2626; color: white; padding: 20px; font-weight: bold; text-align: center; z-index: 999999; position: fixed; top: 0; width: 100%; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
         <i class="fa-solid fa-triangle-exclamation text-2xl mb-2"></i><br>
-        تحذير: أنت تفتح الموقع من داخل برنامج (ZArchiver). <br>
-        يرجى استخراج الملف (Extract) وفتحه باستخدام متصفح جوجل كروم (Google Chrome).
+        تحذير: أنت تفتح الموقع من داخل برنامج (ZArchiver). يرجى فتح الرابط من متصفح جوجل كروم.
     </div>
 
     <!-- ================= شاشة تسجيل الدخول ================= -->
@@ -118,17 +155,78 @@
 
     <!-- الغلاف الرئيسي (المنصة) -->
     <div id="app-wrapper" style="display: none;" class="hidden-force">
+
+        <!-- شريط الجمل المحفزة العلوي (50 جملة) -->
+        <div class="marquee-wrapper">
+            <div class="marquee-track">
+                النجاح يبدأ بقرار، فكن صاحب القرار اليوم. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                كل صفحة تقرأها الآن تبني طوبة في قصر مستقبلك. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                التعب يزول والإنجاز يبقى، فاستمر. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                لا تؤجل عمل اليوم إلى الغد، فالمستقبل يُبنى الآن. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                طريق الألف ميل يبدأ بخطوة، والنجاح يبدأ بمسألة. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                الهندسة ليست صعبة لمن يمتلك الإرادة. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                من طلب العلا سهر الليالي. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                العبقرية هي 1% إلهام و 99% جهد وعرق. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                لا تستسلم، فالبدايات دائماً هي الأصعب. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                أحلامك تستحق التعب، فقاتل من أجلها. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                النجاح لا يأتي لمن ينتظره، بل لمن يسعى إليه. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                اجعل من العقبات سلالم ترتقي بها للقمة. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                كل معادلة تفهمها تقربك خطوة من حلمك. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                المهندس الناجح هو الذي لا يتوقف عن التعلم. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                المذاكرة اليوم هي راحة الغد. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                تذكر دائماً لماذا بدأت، ولا تتوقف حتى تصل. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                الألم المؤقت للمذاكرة أفضل من ألم الندم المستمر. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                أنت أقوى مما تتخيل، وأذكى مما تعتقد. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                لا تدع الخوف من الفشل يمنعك من المحاولة. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                القمة تتسع للجميع، فاحجز مكانك فيها. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                العلم يبني بيوتاً لا عماد لها. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                التركيز هو مفتاح الإنجاز السريع. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                نظم وقتك، تضاعف إنجازك. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                لا تقارن نفسك بغيرك، بل قارن نفسك بما كنت عليه بالأمس. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                الخطأ هو فرصة للتعلم وليس نهاية المطاف. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                الإصرار يصنع المعجزات. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                كل ساعة تذاكرها ترفع من قيمتك في سوق العمل. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                استثمر في عقلك، فهو أفضل أصل تمتلكه. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                التحديات تصنع الأبطال، والامتحانات تصنع المهندسين. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                لا تنتظر الإلهام، بل ابدأ وسيأتي الإلهام لاحقاً. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                من جد وجد، ومن زرع حصد. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                اجعل شغفك هو محركك الأساسي للتفوق. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                العقل السليم في الجسم السليم، فاهتم بصحتك لتتفوق. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                تفائل بما تهوى يكن. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                لا تلتفت للمحبطين، ركز على هدفك فقط. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                الصبر مفتاح الفرج، ومفتاح حل أعقد المسائل. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                كل مجهود تبذله سيُرد لك أضعافاً في مستقبلك. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                المهندس العظيم يبدأ طالباً مجتهداً. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                تجاوز حدودك، فإمكانياتك لا حصر لها. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                اجعل التفوق عادة وليس مجرد هدف مؤقت. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                ثق بنفسك، فأنت قادر على صنع المستحيل. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                لا تبحث عن الأعذار، بل ابحث عن الحلول. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                المراجعة المستمرة تثبت المعلومة كالحجر. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                النوم الجيد هو سلاحك السري للتركيز العميق. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                أسأل وابحث ولا تخجل من عدم المعرفة. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                شارك علمك مع زملائك، فالعلم يزيد بالعطاء. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                كن فخوراً بكل خطوة صغيرة تخطوها نحو هدفك. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                الفشل الحقيقي هو التوقف عن المحاولة. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                الهندسة فن قبل أن تكون علماً، فاستمتع بما تدرسه. <i class="fa-solid fa-bolt text-keep-blue mx-4"></i>
+                توكل على الله، وابذل الأسباب، وسيكون النجاح حليفك.
+            </div>
+        </div>
         
+        <!-- الهيدر العلوي -->
         <header class="theme-header shadow-sm relative z-10 px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-3">
             <div class="flex items-center gap-3 w-full md:w-auto">
                 <button onclick="window.toggleSidebar()" class="text-xl theme-text-muted hover:text-keep-blue transition p-2 rounded-full theme-hover cursor-pointer"><i class="fa-solid fa-bars"></i></button>
-                <div class="flex items-center gap-2">
-                    <img src="https://www.gstatic.com/images/branding/product/1x/keep_2020q4_48dp.png" alt="Keep" class="w-8 h-8 opacity-90 filter hue-rotate-[200deg]">
-                    <h1 class="text-xl font-bold theme-text">الهندسة Notes</h1>
+                <div class="flex items-center gap-3">
+                    <img src="https://www.gstatic.com/images/branding/product/1x/keep_2020q4_48dp.png" alt="Keep" class="w-10 h-10 opacity-90 filter hue-rotate-[200deg]">
+                    <div class="flex flex-col">
+                        <h1 class="text-xl font-bold theme-text leading-tight">الهندسة Notes</h1>
+                        <!-- عداد المساحة الذكي -->
+                        <span id="total-storage-size" class="text-xs font-bold text-keep-blue bg-blue-900 bg-opacity-20 px-2 py-0.5 rounded mt-1 inline-block w-max">جاري حساب المساحة...</span>
+                    </div>
                 </div>
             </div>
 
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2 mt-3 md:mt-0">
                 <button onclick="window.toggleViewMode()" class="theme-text-muted hover:text-yellow-500 p-2 rounded-full theme-hover transition cursor-pointer" title="وضع الموبايل/اللاب"><i class="fa-solid fa-mobile-screen text-lg"></i></button>
                 <button onclick="window.toggleTheme()" class="theme-text-muted hover:text-blue-400 p-2 rounded-full theme-hover transition cursor-pointer" title="تغيير المظهر"><i class="fa-solid fa-moon text-lg"></i></button>
             </div>
@@ -149,25 +247,32 @@
 
             <main class="flex-1 overflow-y-auto p-4 md:p-8 relative" style="flex: 1; overflow-y: auto;">
                 
-                <div id="supabase-warning" class="hidden-force bg-red-900 border border-red-500 text-white p-4 rounded-lg mb-6 shadow text-center text-sm font-bold">
-                    <i class="fa-solid fa-triangle-exclamation text-xl mb-2"></i><br>
-                    يوجد خطأ في الاتصال بقاعدة البيانات. يرجى مراجعة الإعدادات.
-                </div>
-
                 <!-- ================= 1. قسم المذكرات ================= -->
                 <div id="notes-tab" class="tab-content fade-in block" style="display: block;">
                     <div class="max-w-2xl mx-auto mb-10 relative">
                         <div id="note-creator" class="keep-input-box p-4 cursor-text transition-all">
                             <input type="text" id="note-title" placeholder="العنوان" class="keep-input text-lg font-bold mb-3 hidden-force">
-                            <textarea id="note-body" placeholder="إضافة مذكرة..." rows="1" class="keep-input" onfocus="window.showNoteActions()" oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"></textarea>
-                            <div id="note-actions" class="hidden-force flex justify-end mt-3 border-t theme-border pt-2 gap-2">
-                                <button onclick="window.hideNoteActions()" class="theme-text-muted hover:text-keep-blue font-bold px-4 py-2 rounded cursor-pointer">إغلاق</button>
-                                <button onclick="window.saveNote()" class="text-keep-blue font-bold px-4 py-2 rounded hover:bg-blue-500 hover:bg-opacity-10 cursor-pointer">حفظ</button>
+                            <textarea id="note-body" placeholder="إضافة مذكرة (ويمكنك رفع صور لها)..." rows="1" class="keep-input" onfocus="window.showNoteActions()" oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"></textarea>
+                            
+                            <!-- معاينة الصور قبل الرفع للمذكرة -->
+                            <div id="note-images-preview" class="hidden-force flex-wrap gap-2 mt-3 p-2 bg-gray-100 dark:bg-gray-800 rounded"></div>
+                            
+                            <div id="note-progress-container" class="hidden-force mt-3 text-center text-sm font-bold text-keep-blue"><div class="loader mr-2"></div>جاري الرفع وحفظ المذكرة...</div>
+
+                            <div id="note-actions" class="hidden-force flex justify-between items-center mt-3 border-t theme-border pt-2">
+                                <div class="flex gap-2">
+                                    <input type="file" id="note-images-input" multiple accept="image/*" class="hidden-force" onchange="window.previewNoteImages(event)">
+                                    <button onclick="document.getElementById('note-images-input').click()" class="theme-text-muted hover:text-keep-blue font-bold px-3 py-2 rounded transition cursor-pointer bg-gray-100 dark:bg-gray-800" title="إرفاق صور"><i class="fa-solid fa-camera"></i> إضافة صور</button>
+                                </div>
+                                <div class="flex gap-2">
+                                    <button onclick="window.hideNoteActions()" class="theme-text-muted hover:text-keep-blue font-bold px-4 py-2 rounded cursor-pointer">إغلاق</button>
+                                    <button id="save-note-btn" onclick="window.saveNote()" class="text-keep-blue font-bold px-4 py-2 rounded hover:bg-blue-500 hover:bg-opacity-10 cursor-pointer">حفظ</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div id="notes-grid" class="masonry">
-                        <div class="text-center theme-text-muted py-10 w-full">جاهز لإضافة المذكرات...</div>
+                        <div class="text-center theme-text-muted py-10 w-full">جاري التحميل...</div>
                     </div>
                 </div>
 
@@ -194,7 +299,7 @@
                         <div class="flex justify-between items-center mb-6">
                             <h2 class="text-2xl font-bold theme-text"><i class="fa-solid fa-table-list me-2 text-keep-blue"></i> الجدول الأسبوعي</h2>
                             <button onclick="window.openScheduleModal()" class="bg-transparent border border-gray-500 text-gray-500 hover:bg-gray-500 hover:text-white px-4 py-2 rounded-lg font-bold transition theme-border theme-text cursor-pointer">
-                                <i class="fa-solid fa-pen"></i> تعديل
+                                <i class="fa-solid fa-pen"></i> إضافة / تعديل
                             </button>
                         </div>
                         <div class="keep-card overflow-hidden mb-8 shadow-sm">
@@ -207,12 +312,25 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="keep-card p-6 text-center border-dashed">
-                            <i class="fa-regular fa-file-pdf text-4xl text-red-400 mb-3"></i>
-                            <h3 class="font-bold theme-text mb-2">ملف الجدول (PDF)</h3>
-                            <a id="download-schedule-btn" href="#" target="_blank" class="hidden-force inline-block bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-full font-bold transition mt-2 cursor-pointer">عرض الملف المرفق</a>
-                            <p id="no-schedule-pdf" class="text-sm theme-text-muted">لا يوجد ملف PDF للجدول حالياً.</p>
+
+                        <!-- عرض صور وملفات الجدول -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="keep-card p-6 text-center border-dashed border-2">
+                                <i class="fa-regular fa-file-pdf text-4xl text-red-400 mb-3"></i>
+                                <h3 class="font-bold theme-text mb-2">ملف الجدول (PDF)</h3>
+                                <a id="download-schedule-btn" href="#" target="_blank" class="hidden-force inline-block bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-full font-bold transition mt-2 cursor-pointer">عرض الملف المرفق</a>
+                                <p id="no-schedule-pdf" class="text-sm theme-text-muted">لا يوجد ملف PDF للجدول حالياً.</p>
+                            </div>
+                            
+                            <div class="keep-card p-6 text-center border-dashed border-2">
+                                <i class="fa-regular fa-images text-4xl text-green-400 mb-3"></i>
+                                <h3 class="font-bold theme-text mb-2">صور الجدول</h3>
+                                <div id="schedule-images-display" class="flex flex-wrap justify-center gap-3 mt-3">
+                                    <p class="text-sm theme-text-muted w-full">لا توجد صور مرفوعة للجدول.</p>
+                                </div>
+                            </div>
                         </div>
+
                     </div>
                 </div>
 
@@ -230,13 +348,16 @@
                     <button onclick="window.closeModal('subject-modal')" class="theme-text-muted hover:text-red-400 text-2xl transition cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
                 </div>
                 <div class="p-4 sm:p-6 overflow-y-auto flex-1">
-                    <div class="keep-card p-4 mb-6 shadow-sm flex flex-col md:flex-row gap-3 items-center">
-                        <input type="text" id="file-title" placeholder="وصف الملف (مثال: شيت 1)" class="theme-input p-2 rounded border theme-border flex-1 w-full bg-transparent outline-none">
-                        <input type="file" id="subject-file-input" class="theme-text-muted w-full md:w-auto text-sm cursor-pointer">
-                        <button id="upload-file-btn" onclick="window.uploadFile()" class="bg-keep-blue text-gray-900 font-bold px-6 py-2 rounded transition hover:opacity-80 w-full md:w-auto whitespace-nowrap cursor-pointer">رفع لـ Supabase</button>
+                    <div class="keep-card p-4 mb-6 shadow-sm flex flex-col gap-3">
+                        <label class="font-bold theme-text text-sm"><i class="fa-solid fa-upload text-keep-blue me-2"></i> رفع ملفات أو صور للمادة (يمكنك تحديد أكثر من ملف معاً):</label>
+                        <div class="flex flex-col md:flex-row gap-3 items-center">
+                            <input type="text" id="file-title" placeholder="وصف الملفات (مثال: صور المحاضرة 1)" class="theme-input p-2 rounded border theme-border flex-1 w-full bg-transparent outline-none">
+                            <input type="file" id="subject-file-input" multiple class="theme-text-muted w-full md:w-auto text-sm cursor-pointer border p-1 rounded">
+                            <button id="upload-file-btn" onclick="window.uploadFile()" class="bg-keep-blue text-gray-900 font-bold px-8 py-2 rounded transition hover:opacity-80 w-full md:w-auto whitespace-nowrap cursor-pointer shadow">رفع الدفعة</button>
+                        </div>
                     </div>
-                    <div id="upload-progress-container" class="hidden-force mb-6 text-center text-sm theme-text font-bold text-blue-500">جاري الرفع... يرجى الانتظار</div>
-                    <h3 class="font-bold mb-3 theme-text text-sm">الداتا المرفوعة:</h3>
+                    <div id="upload-progress-container" class="hidden-force mb-6 text-center text-sm theme-text font-bold text-keep-blue"><div class="loader mr-2"></div>جاري رفع الملفات للسيرفر...</div>
+                    <h3 class="font-bold mb-3 theme-text text-sm border-r-4 border-keep-blue pr-2">الداتا المرفوعة للمادة:</h3>
                     <div id="subject-files-list" class="masonry"></div>
                 </div>
             </div>
@@ -251,12 +372,17 @@
                 </div>
                 <div class="p-6 overflow-y-auto">
                     <div class="space-y-4 mb-6" id="schedule-inputs-container"></div>
+                    
                     <div class="border-t theme-border pt-4 mb-4">
-                        <label class="block text-sm font-bold theme-text mb-2">إرفاق PDF للجدول (اختياري)</label>
-                        <input type="file" id="schedule-pdf" accept=".pdf" class="theme-text-muted w-full text-sm cursor-pointer">
+                        <label class="block text-sm font-bold theme-text mb-2 text-red-400"><i class="fa-regular fa-file-pdf"></i> إرفاق PDF للجدول (يستبدل القديم):</label>
+                        <input type="file" id="schedule-pdf" accept=".pdf" class="theme-text-muted w-full text-sm cursor-pointer mb-4 p-2 border rounded">
+                        
+                        <label class="block text-sm font-bold theme-text mb-2 text-green-400"><i class="fa-regular fa-images"></i> رفع صور للجدول (تحديد متعدد):</label>
+                        <input type="file" id="schedule-images-input" multiple accept="image/*" class="theme-text-muted w-full text-sm cursor-pointer p-2 border rounded">
                     </div>
-                    <button id="save-schedule-btn" onclick="window.saveSchedule()" class="w-full bg-keep-blue text-gray-900 py-3 rounded-lg font-bold transition hover:opacity-80 cursor-pointer">حفظ التعديلات</button>
-                    <div id="schedule-upload-status" class="text-sm mt-3 text-center font-bold"></div>
+                    
+                    <button id="save-schedule-btn" onclick="window.saveSchedule()" class="w-full bg-keep-blue text-gray-900 py-3 rounded-lg font-bold transition hover:opacity-80 cursor-pointer shadow">حفظ ورفع التعديلات</button>
+                    <div id="schedule-upload-status" class="hidden-force mt-3 text-center text-sm font-bold text-keep-blue"><div class="loader mr-2"></div>جاري حفظ الجدول والملفات...</div>
                 </div>
             </div>
         </div>
@@ -278,16 +404,11 @@
 
     </div>
 
-    <!-- ================= سكريبت Javascript القوي والمستقل ================= -->
+    <!-- ================= سكريبت Javascript القوي ================= -->
     <script>
-        // ==========================================
-        // 🔴🔴 تم دمج بياناتك الحقيقية بنجاح 🔴🔴
-        // ==========================================
         const MY_SUPABASE_URL = "https://iarkdmqupidhvlgdwufu.supabase.co"; 
         const MY_SUPABASE_KEY = "sb_publishable_r6JmUcxJ_yamricI_EVI3g_lUXiAf0e";
-        // ==========================================
 
-        // حماية ZArchiver
         if (window.location.href.indexOf('content://') > -1 || window.location.href.indexOf('zarch') > -1) {
             document.getElementById('zarch-warning').style.display = 'block';
         }
@@ -311,12 +432,12 @@
         window.currentEditType = null;
         window.currentEditId = null;
         window.currentSubjectId = null;
+        window.currentNoteImagesRaw = null; 
         window.daysKeys = [
             { id: 'sat', name: 'السبت' }, { id: 'sun', name: 'الأحد' }, { id: 'mon', name: 'الإثنين' }, 
             { id: 'tue', name: 'الثلاثاء' }, { id: 'wed', name: 'الأربعاء' }, { id: 'thu', name: 'الخميس' }, { id: 'fri', name: 'الجمعة' }
         ];
 
-        // التهيئة باستخدام بياناتك الثابتة
         window.initSupabase = function() {
             try {
                 if (window.supabase) {
@@ -328,7 +449,7 @@
 
         window.checkConnectionAlert = function() {
             if(!window.isConfigured || !window.supabaseInstance) {
-                alert("لم يتمكن النظام من الاتصال بالسيرفر. يرجى التحقق من اتصالك بالإنترنت.");
+                alert("لم يتمكن النظام من الاتصال بالسيرفر. يرجى التحقق من الإنترنت.");
                 return false;
             }
             return true;
@@ -343,9 +464,7 @@
                 if(pwd === '#ZMsd42d*' || pwd === 'ZMsd42d*') {
                     window.hideElement('login-screen');
                     window.showElement('app-wrapper', 'flex');
-                    if(!window.isConfigured) {
-                        window.showElement('supabase-warning', 'block');
-                    } else {
+                    if(window.isConfigured) {
                         window.initApp();
                     }
                 } else { 
@@ -391,8 +510,63 @@
             if(window.innerWidth < 768) { window.hideElement('sidebar'); }
         };
 
+        window.openLightbox = function(url) {
+            document.getElementById('lightbox-img').src = url;
+            window.showElement('lightbox-modal', 'flex');
+        };
+        window.closeLightbox = function() {
+            window.hideElement('lightbox-modal');
+            document.getElementById('lightbox-img').src = '';
+        };
+
+        window.updateStorageSize = async function() {
+            if(!window.isConfigured || !window.supabaseInstance) return;
+            const sizeEl = document.getElementById('total-storage-size');
+            try {
+                let totalBytes = 0;
+                const getFolderSize = async (path) => {
+                    let size = 0;
+                    const { data } = await window.supabaseInstance.storage.from('materials').list(path);
+                    if(data) {
+                        for(let item of data) {
+                            if(item.id) { size += item.metadata?.size || 0; } 
+                            else { size += await getFolderSize(path ? `${path}/${item.name}` : item.name); }
+                        }
+                    }
+                    return size;
+                };
+                totalBytes = await getFolderSize('');
+                const mb = (totalBytes / (1024 * 1024)).toFixed(2);
+                sizeEl.innerText = `المساحة المستخدمة: ${mb} MB / 1024 MB`;
+            } catch(e) {
+                sizeEl.innerText = "تعذر حساب المساحة";
+            }
+        };
+
         window.showNoteActions = function() { window.showElement('note-title', 'block'); window.showElement('note-actions', 'flex'); };
-        window.hideNoteActions = function() { window.hideElement('note-title'); window.hideElement('note-actions'); document.getElementById('note-title').value = ''; document.getElementById('note-body').value = ''; document.getElementById('note-body').style.height = ''; };
+        window.hideNoteActions = function() { 
+            window.hideElement('note-title'); window.hideElement('note-actions'); window.hideElement('note-images-preview');
+            document.getElementById('note-title').value = ''; document.getElementById('note-body').value = ''; 
+            document.getElementById('note-body').style.height = ''; document.getElementById('note-images-input').value = '';
+        };
+
+        window.previewNoteImages = function(event) {
+            const previewContainer = document.getElementById('note-images-preview');
+            previewContainer.innerHTML = '';
+            const files = event.target.files;
+            if(files.length > 0) {
+                window.showElement('note-images-preview', 'flex');
+                for(let file of files) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        previewContainer.innerHTML += `<img src="${e.target.result}" class="w-16 h-16 object-cover rounded border border-gray-400">`;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            } else {
+                window.hideElement('note-images-preview');
+            }
+        };
         
         window.showSubjectActions = function() { window.showElement('subject-extra', 'block'); };
         window.hideSubjectActions = function() { window.hideElement('subject-extra'); document.getElementById('subject-name').value = ''; document.getElementById('subject-dept').value = ''; };
@@ -404,18 +578,38 @@
                 const grid = document.getElementById('notes-grid'); grid.innerHTML = '';
                 if(data && data.length > 0) {
                     data.forEach(d => {
-                        const safeTitle = (d.title||'').replace(/'/g, "\\'").replace(/"/g, '&quot;');
-                        const safeBody = (d.body||'').replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, '\\n');
+                        let actualBody = d.body || '';
+                        let imagesHtml = '';
+                        let safeTitle = (d.title||'').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                        let safeBodyFull = actualBody.replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, '\\n');
+                        
+                        if (actualBody.includes('||IMAGES||')) {
+                            const parts = actualBody.split('||IMAGES||');
+                            actualBody = parts[0];
+                            try {
+                                const urls = JSON.parse(parts[1]);
+                                if(urls.length > 0) {
+                                    imagesHtml = '<div class="flex flex-wrap gap-2 mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">';
+                                    urls.forEach(url => {
+                                        imagesHtml += `<img src="${url}" class="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded cursor-pointer border border-gray-300 hover:opacity-80 transition shadow-sm" onclick="window.openLightbox('${url}')">`;
+                                    });
+                                    imagesHtml += '</div>';
+                                }
+                            } catch(e){}
+                        }
+
                         const el = document.createElement('div'); el.className = "keep-card p-4 masonry-item group";
                         el.innerHTML = `
-                            <h3 class="font-bold mb-2">${d.title}</h3><p class="text-sm theme-text-muted whitespace-pre-wrap">${d.body}</p>
-                            <div class="keep-card-actions absolute bottom-2 left-2 flex gap-2">
-                                <button onclick="window.openEditModal('note', '${d.id}', '${safeTitle}', '${safeBody}')" class="w-8 h-8 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 theme-text-muted flex items-center justify-center cursor-pointer"><i class="fa-solid fa-pen text-xs"></i></button>
-                                <button onclick="window.deleteItem('notes', '${d.id}')" class="w-8 h-8 rounded-full hover:bg-red-100 hover:text-red-500 theme-text-muted flex items-center justify-center cursor-pointer"><i class="fa-solid fa-trash text-xs"></i></button>
+                            <h3 class="font-bold mb-2 text-lg">${d.title}</h3>
+                            <p class="text-sm theme-text-muted whitespace-pre-wrap leading-relaxed">${actualBody}</p>
+                            ${imagesHtml}
+                            <div class="keep-card-actions absolute top-2 left-2 flex gap-2 bg-black bg-opacity-10 backdrop-blur-sm p-1 rounded-full z-10">
+                                <button onclick="window.openEditModal('note', '${d.id}', '${safeTitle}', '${safeBodyFull}')" class="w-7 h-7 rounded-full bg-white dark:bg-gray-800 text-gray-600 hover:text-keep-blue flex items-center justify-center cursor-pointer shadow"><i class="fa-solid fa-pen text-xs"></i></button>
+                                <button onclick="window.deleteItem('notes', '${d.id}')" class="w-7 h-7 rounded-full bg-white dark:bg-gray-800 text-red-400 hover:text-red-600 flex items-center justify-center cursor-pointer shadow"><i class="fa-solid fa-trash text-xs"></i></button>
                             </div>`;
                         grid.appendChild(el);
                     });
-                } else { grid.innerHTML = "<div class='text-center theme-text-muted py-10 w-full'>لا توجد مذكرات بعد.</div>"; }
+                } else { grid.innerHTML = "<div class='text-center theme-text-muted py-10 w-full'>لا توجد مذكرات بعد. ابدأ بإضافة مذكرتك الأولى!</div>"; }
             } catch(e) { console.error(e); }
         };
 
@@ -428,18 +622,19 @@
                     data.forEach(d => {
                         const safeName = (d.name||'').replace(/'/g, "\\'").replace(/"/g, '&quot;');
                         const safeDept = (d.department||'').replace(/'/g, "\\'").replace(/"/g, '&quot;');
-                        const el = document.createElement('div'); el.className = "keep-card p-4 masonry-item group cursor-pointer flex flex-col";
+                        const el = document.createElement('div'); el.className = "keep-card p-5 masonry-item group cursor-pointer flex flex-col hover:border-keep-blue border-b-4 border-b-transparent transition-all";
                         el.innerHTML = `
-                            <div onclick="window.openSubjectModal('${d.id}', '${safeName}', '${safeDept}')" class="flex-1">
-                                <h3 class="text-lg font-bold mb-1">${d.name}</h3><span class="text-xs bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded theme-text-muted">${d.department}</span>
+                            <div onclick="window.openSubjectModal('${d.id}', '${safeName}', '${safeDept}')" class="flex-1 text-center py-4">
+                                <i class="fa-solid fa-folder-open text-4xl text-keep-blue mb-3 opacity-80 group-hover:opacity-100 transition"></i>
+                                <h3 class="text-xl font-bold mb-1">${d.name}</h3><span class="text-xs bg-gray-200 dark:bg-gray-700 px-3 py-1 rounded-full theme-text-muted font-bold">${d.department}</span>
                             </div>
-                            <div class="keep-card-actions absolute top-2 left-2 flex gap-1">
-                                <button onclick="event.stopPropagation(); window.openEditModal('subject', '${d.id}', '${safeName}', '${safeDept}')" class="w-7 h-7 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 theme-text-muted cursor-pointer"><i class="fa-solid fa-pen text-xs"></i></button>
-                                <button onclick="event.stopPropagation(); window.deleteItem('subjects', '${d.id}')" class="w-7 h-7 rounded-full hover:bg-red-100 hover:text-red-500 theme-text-muted cursor-pointer"><i class="fa-solid fa-trash text-xs"></i></button>
+                            <div class="keep-card-actions absolute top-2 left-2 flex gap-1 z-10">
+                                <button onclick="event.stopPropagation(); window.openEditModal('subject', '${d.id}', '${safeName}', '${safeDept}')" class="w-8 h-8 rounded-full hover:bg-gray-200 dark:bg-gray-700 theme-text-muted cursor-pointer shadow"><i class="fa-solid fa-pen text-sm"></i></button>
+                                <button onclick="event.stopPropagation(); window.deleteItem('subjects', '${d.id}')" class="w-8 h-8 rounded-full hover:bg-red-100 hover:text-red-500 theme-text-muted cursor-pointer shadow"><i class="fa-solid fa-trash text-sm"></i></button>
                             </div>`;
                         grid.appendChild(el);
                     });
-                } else { grid.innerHTML = "<div class='text-center theme-text-muted py-10 w-full'>لا توجد مواد مضافة بعد.</div>"; }
+                } else { grid.innerHTML = "<div class='text-center theme-text-muted py-10 w-full'>لم يتم إضافة أي مواد دراسية بعد.</div>"; }
             } catch(e) { console.error(e); }
         };
 
@@ -457,6 +652,22 @@
                 } else { 
                     window.hideElement('download-schedule-btn'); window.showElement('no-schedule-pdf', 'block'); 
                 }
+
+                const imgContainer = document.getElementById('schedule-images-display');
+                imgContainer.innerHTML = '';
+                const scheduleImages = daysData.schedule_images || [];
+                if(scheduleImages.length > 0) {
+                    scheduleImages.forEach(url => {
+                        imgContainer.innerHTML += `
+                            <div class="relative group">
+                                <img src="${url}" class="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded border border-gray-300 cursor-pointer hover:opacity-80 transition shadow" onclick="window.openLightbox('${url}')">
+                                <button onclick="window.deleteScheduleImage('${url}')" class="absolute top-1 left-1 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition cursor-pointer shadow"><i class="fa-solid fa-xmark text-xs"></i></button>
+                            </div>`;
+                    });
+                } else {
+                    imgContainer.innerHTML = `<p class="text-sm theme-text-muted w-full">لا توجد صور مرفوعة للجدول.</p>`;
+                }
+
             } catch (e) { console.error(e); }
         };
 
@@ -465,30 +676,91 @@
             try {
                 const { data } = await window.supabaseInstance.from('files').select('*').eq('subject_id', id).order('created_at', { ascending: false });
                 const list = document.getElementById('subject-files-list'); list.innerHTML = '';
-                if(!data || data.length === 0) { list.innerHTML = "<div class='text-center theme-text-muted w-full py-4'>لا توجد ملفات مرفوعة لهذه المادة.</div>"; return; }
+                if(!data || data.length === 0) { list.innerHTML = "<div class='text-center theme-text-muted w-full py-8 border-dashed border-2 rounded'>لا توجد ملفات مرفوعة لهذه المادة حتى الآن.</div>"; return; }
+                
                 data.forEach(d => {
-                    const el = document.createElement('div'); el.className = "keep-card p-3 masonry-item flex justify-between items-center group";
-                    el.innerHTML = `
-                        <div class="truncate pr-2">
-                            <h4 class="font-bold text-sm truncate">${d.title}</h4>
-                            <a href="${d.url}" target="_blank" class="text-xs text-keep-blue hover:underline truncate" dir="ltr">${d.file_name}</a>
-                        </div>
-                        <button onclick="window.deleteFile('${d.id}', '${d.file_path}')" class="text-red-400 hover:text-red-600 p-2 opacity-0 group-hover:opacity-100 transition cursor-pointer"><i class="fa-solid fa-trash"></i></button>`;
+                    const isImage = /\.(jpg|jpeg|png|gif|webp)$/i.test(d.file_name);
+                    const el = document.createElement('div');
+                    
+                    if(isImage) {
+                        el.className = "keep-card p-2 masonry-item flex flex-col items-center group shadow-sm hover:shadow-md";
+                        el.innerHTML = `
+                            <div class="w-full h-40 overflow-hidden rounded mb-2 bg-gray-100 dark:bg-gray-800 flex items-center justify-center cursor-pointer relative" onclick="window.openLightbox('${d.url}')">
+                                <img src="${d.url}" class="w-full h-full object-cover transition transform hover:scale-105">
+                                <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition flex items-center justify-center"><i class="fa-solid fa-expand text-white opacity-0 group-hover:opacity-100 text-2xl drop-shadow-md"></i></div>
+                            </div>
+                            <div class="flex justify-between items-center w-full px-1">
+                                <div class="truncate">
+                                    <h4 class="font-bold text-sm truncate" title="${d.title}">${d.title}</h4>
+                                    <p class="text-xs text-keep-blue truncate" dir="ltr">${d.file_name}</p>
+                                </div>
+                                <div class="flex gap-2">
+                                    <a href="${d.url}" target="_blank" class="text-keep-blue hover:text-blue-600 p-2"><i class="fa-solid fa-download"></i></a>
+                                    <button onclick="window.deleteFile('${d.id}', '${d.file_path}')" class="text-red-400 hover:text-red-600 p-2 opacity-0 group-hover:opacity-100 transition cursor-pointer"><i class="fa-solid fa-trash"></i></button>
+                                </div>
+                            </div>`;
+                    } else {
+                        el.className = "keep-card p-3 masonry-item flex justify-between items-center group border-l-4 border-l-keep-blue shadow-sm";
+                        el.innerHTML = `
+                            <div class="flex items-center gap-3 overflow-hidden">
+                                <i class="fa-solid fa-file-pdf text-3xl text-red-400"></i>
+                                <div class="truncate pr-2">
+                                    <h4 class="font-bold text-sm truncate" title="${d.title}">${d.title}</h4>
+                                    <a href="${d.url}" target="_blank" class="text-xs text-keep-blue hover:underline truncate" dir="ltr">${d.file_name}</a>
+                                </div>
+                            </div>
+                            <div class="flex gap-1 shrink-0">
+                                <a href="${d.url}" target="_blank" class="bg-gray-100 dark:bg-gray-800 hover:bg-keep-blue hover:text-white text-gray-600 w-8 h-8 rounded-full flex items-center justify-center transition shadow-sm"><i class="fa-solid fa-download text-xs"></i></a>
+                                <button onclick="window.deleteFile('${d.id}', '${d.file_path}')" class="text-red-400 hover:text-red-600 w-8 h-8 opacity-0 group-hover:opacity-100 transition cursor-pointer"><i class="fa-solid fa-trash"></i></button>
+                            </div>`;
+                    }
                     list.appendChild(el);
                 });
             } catch(e) { console.error(e); }
         };
 
-        window.initApp = function() { window.fetchNotes(); window.fetchSubjects(); window.loadSchedule(); };
+        window.initApp = function() { window.fetchNotes(); window.fetchSubjects(); window.loadSchedule(); window.updateStorageSize(); };
 
         window.saveNote = async function() {
             if(!window.checkConnectionAlert()) return;
-            const t = document.getElementById('note-title').value.trim(), b = document.getElementById('note-body').value.trim();
-            if(!t && !b) return;
+            const t = document.getElementById('note-title').value.trim();
+            const b = document.getElementById('note-body').value.trim();
+            const filesInput = document.getElementById('note-images-input');
+            const files = filesInput.files;
+
+            if(!t && !b && files.length === 0) return;
+
+            window.showElement('note-progress-container', 'block');
+            document.getElementById('save-note-btn').disabled = true;
+
             try {
-                const { error } = await window.supabaseInstance.from('notes').insert([{ title: t, body: b }]);
-                if(!error) { window.hideNoteActions(); window.fetchNotes(); } else { alert("حدث خطأ أثناء الحفظ."); }
+                let imageUrls = [];
+                if(files.length > 0) {
+                    for(let file of files) {
+                        const filePath = `notes_images/${Date.now()}_${file.name.replace(/\s/g, '_')}`;
+                        const { error } = await window.supabaseInstance.storage.from('materials').upload(filePath, file);
+                        if(!error) {
+                            const { data: publicData } = window.supabaseInstance.storage.from('materials').getPublicUrl(filePath);
+                            imageUrls.push(publicData.publicUrl);
+                        }
+                    }
+                }
+
+                let finalBody = b;
+                if(imageUrls.length > 0) {
+                    finalBody += `\n||IMAGES||` + JSON.stringify(imageUrls);
+                }
+
+                const { error } = await window.supabaseInstance.from('notes').insert([{ title: t, body: finalBody }]);
+                if(!error) { 
+                    window.hideNoteActions(); window.fetchNotes(); window.updateStorageSize(); 
+                } else { 
+                    alert("حدث خطأ أثناء الحفظ."); 
+                }
             } catch (e) { alert("حدث خطأ بالاتصال"); }
+            
+            window.hideElement('note-progress-container');
+            document.getElementById('save-note-btn').disabled = false;
         };
 
         window.saveSubject = async function() {
@@ -502,26 +774,40 @@
         };
 
         window.openEditModal = function(type, id, val1, val2) {
-            window.currentEditType = type; window.currentEditId = id;
+            window.currentEditType = type; window.currentEditId = id; window.currentNoteImagesRaw = null;
             window.showElement('edit-item-modal');
             document.getElementById('edit-modal-title').innerText = type === 'note' ? 'تعديل المذكرة' : 'تعديل المادة';
-            document.getElementById('edit-input-1').value = val1; document.getElementById('edit-input-2').value = val2 || '';
+            document.getElementById('edit-input-1').value = val1;
+            
+            let textContent = val2 || '';
+            if(type === 'note' && textContent.includes('||IMAGES||')) {
+                const parts = textContent.split('||IMAGES||');
+                textContent = parts[0];
+                window.currentNoteImagesRaw = parts[1];
+            }
+            document.getElementById('edit-input-2').value = textContent;
         };
 
         window.saveEdit = async function() {
             if(!window.checkConnectionAlert()) return;
-            const val1 = document.getElementById('edit-input-1').value.trim(), val2 = document.getElementById('edit-input-2').value.trim();
+            const val1 = document.getElementById('edit-input-1').value.trim();
+            let val2 = document.getElementById('edit-input-2').value.trim();
             if(!val1) return;
+
+            if(window.currentEditType === 'note' && window.currentNoteImagesRaw) {
+                val2 += '||IMAGES||' + window.currentNoteImagesRaw;
+            }
+
             try {
                 if(window.currentEditType === 'note') {
-                    await window.supabaseInstance.from('notes').update({ title: val1, body: val2 }).eq('id', window.currentEditId);
-                    window.fetchNotes();
+                    const {error} = await window.supabaseInstance.from('notes').update({ title: val1, body: val2 }).eq('id', window.currentEditId);
+                    if(error) alert("خطأ في التعديل"); else window.fetchNotes();
                 } else if(window.currentEditType === 'subject') {
-                    await window.supabaseInstance.from('subjects').update({ name: val1, department: val2 }).eq('id', window.currentEditId);
-                    window.fetchSubjects();
+                    const {error} = await window.supabaseInstance.from('subjects').update({ name: val1, department: val2 }).eq('id', window.currentEditId);
+                    if(error) alert("خطأ في التعديل"); else window.fetchSubjects();
                 }
                 window.closeModal('edit-item-modal');
-            } catch (e) { alert("حدث خطأ في التعديل"); }
+            } catch (e) { alert("حدث خطأ في الاتصال"); }
         };
 
         window.deleteItem = async function(type, id) {
@@ -531,6 +817,7 @@
                 const { error } = await window.supabaseInstance.from(type).delete().eq('id', id);
                 if(error) { alert("حدث خطأ أثناء الحذف."); return; }
                 if(type === 'notes') window.fetchNotes(); else window.fetchSubjects();
+                window.updateStorageSize();
             } catch (e) { alert("خطأ في الاتصال"); }
         };
 
@@ -543,36 +830,44 @@
 
         window.deleteFile = async function(fileId, filePath) {
             if(!window.checkConnectionAlert()) return;
-            if(!confirm('هل أنت متأكد من حذف هذا الملف؟ لا يمكن التراجع.')) return;
+            if(!confirm('هل أنت متأكد من حذف هذا الملف بشكل نهائي؟')) return;
             try {
                 await window.supabaseInstance.storage.from('materials').remove([filePath]);
                 await window.supabaseInstance.from('files').delete().eq('id', fileId);
                 window.fetchSubjectFiles(window.currentSubjectId);
+                window.updateStorageSize();
             } catch (e) { alert("خطأ في الحذف"); }
         };
 
         window.uploadFile = async function() {
             if(!window.checkConnectionAlert()) return;
-            const fileInput = document.getElementById('subject-file-input'); const file = fileInput.files[0];
-            const title = document.getElementById('file-title').value.trim();
-            if(!file || !title) { alert("يرجى اختيار ملف وكتابة وصف له."); return; }
+            const fileInput = document.getElementById('subject-file-input'); 
+            const files = fileInput.files;
+            const baseTitle = document.getElementById('file-title').value.trim();
+            
+            if(files.length === 0 || !baseTitle) { alert("يرجى اختيار ملف (أو أكثر) وكتابة وصف عام لهم."); return; }
 
             const uploadBtn = document.getElementById('upload-file-btn');
             window.showElement('upload-progress-container', 'block');
             uploadBtn.disabled = true;
 
             try {
-                const filePath = `subjects/${window.currentSubjectId}/${Date.now()}_${file.name}`;
-                const { data, error } = await window.supabaseInstance.storage.from('materials').upload(filePath, file);
-                if(error) { 
-                    alert("خطأ بالرفع: " + error.message); 
-                } else {
-                    const { data: publicData } = window.supabaseInstance.storage.from('materials').getPublicUrl(filePath);
-                    await window.supabaseInstance.from('files').insert([{ subject_id: window.currentSubjectId, title: title, file_name: file.name, file_path: filePath, url: publicData.publicUrl }]);
-                    fileInput.value = ''; document.getElementById('file-title').value = '';
-                    window.fetchSubjectFiles(window.currentSubjectId);
+                for(let i = 0; i < files.length; i++) {
+                    let file = files[i];
+                    let title = files.length > 1 ? `${baseTitle} (${i+1})` : baseTitle;
+                    const filePath = `subjects/${window.currentSubjectId}/${Date.now()}_${file.name.replace(/\s/g, '_')}`;
+                    
+                    const { error } = await window.supabaseInstance.storage.from('materials').upload(filePath, file);
+                    if(!error) {
+                        const { data: publicData } = window.supabaseInstance.storage.from('materials').getPublicUrl(filePath);
+                        await window.supabaseInstance.from('files').insert([{ subject_id: window.currentSubjectId, title: title, file_name: file.name, file_path: filePath, url: publicData.publicUrl }]);
+                    }
                 }
+                fileInput.value = ''; document.getElementById('file-title').value = '';
+                window.fetchSubjectFiles(window.currentSubjectId);
+                window.updateStorageSize();
             } catch (e) { alert("خطأ أثناء الرفع."); }
+            
             window.hideElement('upload-progress-container'); uploadBtn.disabled = false;
         };
 
@@ -593,29 +888,67 @@
             } catch (e) { console.error(e); }
         };
 
+        window.deleteScheduleImage = async function(url) {
+            if(!confirm("هل تريد إزالة هذه الصورة من الجدول؟")) return;
+            try {
+                const { data } = await window.supabaseInstance.from('schedule').select('*').eq('id', 'main').single();
+                if(data && data.days) {
+                    let daysData = data.days;
+                    if(daysData.schedule_images) {
+                        daysData.schedule_images = daysData.schedule_images.filter(img => img !== url);
+                        await window.supabaseInstance.from('schedule').upsert({ id: 'main', days: daysData, pdf_url: data.pdf_url });
+                        window.loadSchedule();
+                        window.updateStorageSize();
+                    }
+                }
+            } catch(e) { console.error(e); }
+        };
+
         window.saveSchedule = async function() {
             if(!window.checkConnectionAlert()) return;
-            const statusBox = document.getElementById('schedule-upload-status'); const file = document.getElementById('schedule-pdf').files[0];
+            const statusBox = document.getElementById('schedule-upload-status'); 
+            const pdfFile = document.getElementById('schedule-pdf').files[0];
+            const imageFiles = document.getElementById('schedule-images-input').files;
             const btn = document.getElementById('save-schedule-btn');
+            
             let daysData = {}; window.daysKeys.forEach(d => daysData[d.id] = document.getElementById(`sch-${d.id}`).value.trim());
 
-            btn.disabled = true; statusBox.innerText = "جاري الحفظ..."; statusBox.className = "text-sm mt-3 text-center text-blue-400";
+            btn.disabled = true; window.showElement('schedule-upload-status', 'block'); statusBox.innerHTML = '<div class="loader mr-2"></div>جاري حفظ الجدول والملفات...';
             
             try {
-                let pdfUrl = null;
-                if(file) {
-                    const filePath = `schedule/${Date.now()}.pdf`;
-                    await window.supabaseInstance.storage.from('materials').upload(filePath, file);
+                const { data: oldData } = await window.supabaseInstance.from('schedule').select('*').eq('id', 'main').single();
+                let existingImages = (oldData && oldData.days && oldData.days.schedule_images) ? oldData.days.schedule_images : [];
+                let pdfUrl = (oldData && oldData.pdf_url) ? oldData.pdf_url : null;
+
+                if(pdfFile) {
+                    const filePath = `schedule/${Date.now()}_${pdfFile.name.replace(/\s/g, '_')}`;
+                    await window.supabaseInstance.storage.from('materials').upload(filePath, pdfFile);
                     const { data } = window.supabaseInstance.storage.from('materials').getPublicUrl(filePath);
                     pdfUrl = data.publicUrl;
-                } else {
-                    const { data } = await window.supabaseInstance.from('schedule').select('pdf_url').eq('id', 'main').single();
-                    if(data) pdfUrl = data.pdf_url;
                 }
+
+                if(imageFiles.length > 0) {
+                    for(let img of imageFiles) {
+                        const imgPath = `schedule_images/${Date.now()}_${img.name.replace(/\s/g, '_')}`;
+                        const { error } = await window.supabaseInstance.storage.from('materials').upload(imgPath, img);
+                        if(!error) {
+                            const { data } = window.supabaseInstance.storage.from('materials').getPublicUrl(imgPath);
+                            existingImages.push(data.publicUrl);
+                        }
+                    }
+                }
+                
+                daysData.schedule_images = existingImages;
+
                 await window.supabaseInstance.from('schedule').upsert({ id: 'main', days: daysData, pdf_url: pdfUrl });
-                statusBox.innerText = "تم الحفظ بنجاح!"; statusBox.className = "text-sm mt-3 text-center text-green-500";
-                window.loadSchedule(); setTimeout(() => window.hideElement('schedule-edit-modal'), 1000);
-            } catch(e) { statusBox.innerText = "حدث خطأ أثناء الحفظ."; statusBox.className = "text-sm mt-3 text-center text-red-500"; }
+                statusBox.innerHTML = "تم الحفظ بنجاح!"; statusBox.className = "mt-3 text-center text-sm font-bold text-green-500";
+                
+                document.getElementById('schedule-pdf').value = '';
+                document.getElementById('schedule-images-input').value = '';
+                
+                window.loadSchedule(); window.updateStorageSize();
+                setTimeout(() => { window.hideElement('schedule-edit-modal'); window.hideElement('schedule-upload-status'); }, 1500);
+            } catch(e) { statusBox.innerHTML = "حدث خطأ أثناء الحفظ."; statusBox.className = "mt-3 text-center text-sm font-bold text-red-500"; }
             btn.disabled = false;
         };
 
