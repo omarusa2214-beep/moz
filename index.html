@@ -33,7 +33,6 @@
 
     <!-- نظام الثيمات والتصميم + حماية قوية ضد التداخل -->
     <style>
-        /* كود حماية إجباري لمنع تداخل الشاشات لو فشل تحميل مكتبة التصميم */
         .hidden-force, .hidden { display: none !important; }
         
         :root {
@@ -97,27 +96,26 @@
 <body class="theme-midnight antialiased min-h-screen flex flex-col">
 
     <!-- ================= شاشة تسجيل الدخول ================= -->
-    <!-- تمت إضافة style="display: flex;" بشكل قوي لضمان ظهورها أولاً وعدم اختفائها -->
     <div id="login-screen" style="display: flex; position: fixed; inset: 0; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; z-index: 9999;">
         <div class="glass-panel p-10 rounded-2xl w-96 max-w-[90%] text-center fade-in shadow-2xl">
             <div class="text-keep-blue text-5xl mb-4"><i class="fa-solid fa-user-lock"></i></div>
             <h1 class="text-2xl font-bold mb-2 text-white">Engineering Keep</h1>
             <p class="text-sm text-gray-300 mb-6">يرجى تأكيد الدخول (الباسورد جاهز)</p>
             
-            <input type="password" id="password-input" value="#ZMsd42d*" placeholder="كلمة المرور..." class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-600 text-white focus:outline-none focus:border-keep-blue mb-4 text-center text-lg" dir="ltr">
+            <input type="password" id="password-input" value="#ZMsd42d*" placeholder="كلمة المرور..." class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-600 text-white focus:outline-none focus:border-keep-blue mb-4 text-center text-lg" dir="ltr" onkeypress="if(event.key === 'Enter') checkAuth()">
             
-            <button id="login-btn" class="w-full bg-keep-blue hover:bg-blue-500 text-gray-900 font-bold py-3 rounded-lg transition duration-300 shadow cursor-pointer">دخول للمنصة</button>
+            <button id="login-btn" onclick="checkAuth()" class="w-full bg-keep-blue hover:bg-blue-500 text-gray-900 font-bold py-3 rounded-lg transition duration-300 shadow cursor-pointer">دخول للمنصة</button>
             <p id="login-error" class="text-red-400 text-sm mt-3 hidden-force font-bold">كلمة المرور غير صحيحة!</p>
         </div>
     </div>
 
-    <!-- الغلاف الرئيسي (مخفي بقوة style="display:none" حتى يتم الدخول) -->
+    <!-- الغلاف الرئيسي (المنصة) -->
     <div id="app-wrapper" style="display: none;" class="hidden-force">
         
         <!-- الهيدر العلوي -->
         <header class="theme-header shadow-sm relative z-10 px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-3">
             <div class="flex items-center gap-3 w-full md:w-auto">
-                <button id="menu-toggle" class="text-xl theme-text-muted hover:text-keep-blue transition p-2 rounded-full theme-hover cursor-pointer"><i class="fa-solid fa-bars"></i></button>
+                <button onclick="toggleSidebar()" class="text-xl theme-text-muted hover:text-keep-blue transition p-2 rounded-full theme-hover cursor-pointer"><i class="fa-solid fa-bars"></i></button>
                 <div class="flex items-center gap-2">
                     <img src="https://www.gstatic.com/images/branding/product/1x/keep_2020q4_48dp.png" alt="Keep" class="w-8 h-8 opacity-90 filter hue-rotate-[200deg]">
                     <h1 class="text-xl font-bold theme-text">الهندسة Notes</h1>
@@ -126,14 +124,14 @@
 
             <!-- أزرار التحكم -->
             <div class="flex items-center gap-2">
-                <button id="server-toggle" class="theme-text-muted hover:text-green-500 p-2 rounded-full theme-hover transition cursor-pointer" title="إعدادات Supabase"><i class="fa-solid fa-server text-lg"></i></button>
-                <button id="view-toggle" class="theme-text-muted hover:text-yellow-500 p-2 rounded-full theme-hover transition cursor-pointer" title="وضع الموبايل/اللاب"><i class="fa-solid fa-mobile-screen text-lg"></i></button>
-                <button id="theme-toggle" class="theme-text-muted hover:text-blue-400 p-2 rounded-full theme-hover transition cursor-pointer" title="تغيير المظهر"><i class="fa-solid fa-moon text-lg"></i></button>
+                <button onclick="openServerModal()" class="theme-text-muted hover:text-green-500 p-2 rounded-full theme-hover transition cursor-pointer" title="إعدادات Supabase"><i class="fa-solid fa-server text-lg"></i></button>
+                <button onclick="toggleViewMode()" class="theme-text-muted hover:text-yellow-500 p-2 rounded-full theme-hover transition cursor-pointer" title="وضع الموبايل/اللاب"><i class="fa-solid fa-mobile-screen text-lg"></i></button>
+                <button onclick="toggleTheme()" class="theme-text-muted hover:text-blue-400 p-2 rounded-full theme-hover transition cursor-pointer" title="تغيير المظهر"><i class="fa-solid fa-moon text-lg"></i></button>
             </div>
         </header>
 
         <div class="flex flex-1 overflow-hidden" style="flex: 1; display: flex; overflow: hidden;">
-            <!-- القائمة الجانبية (Sidebar Navigation) -->
+            <!-- القائمة الجانبية (Sidebar) -->
             <nav id="sidebar" class="w-20 md:w-64 flex-shrink-0 theme-panel border-l theme-border transition-all duration-300 py-4 flex flex-col gap-1 z-10">
                 <button onclick="switchTab('notes-tab')" id="btn-notes-tab" class="tab-btn flex items-center gap-4 px-6 py-3 rounded-r-full hover:bg-opacity-20 transition theme-text font-bold cursor-pointer" style="background-color: rgba(138, 180, 248, 0.1); color: var(--text-main);">
                     <i class="fa-regular fa-lightbulb text-xl"></i> <span class="hidden md:inline">المذكرات</span>
@@ -159,10 +157,10 @@
                     <div class="max-w-2xl mx-auto mb-10 relative">
                         <div id="note-creator" class="keep-input-box p-4 cursor-text transition-all">
                             <input type="text" id="note-title" placeholder="العنوان" class="keep-input text-lg font-bold mb-3 hidden-force">
-                            <textarea id="note-body" placeholder="إضافة مذكرة..." rows="1" class="keep-input" oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"></textarea>
+                            <textarea id="note-body" placeholder="إضافة مذكرة..." rows="1" class="keep-input" onfocus="showNoteActions()" oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"></textarea>
                             <div id="note-actions" class="hidden-force flex justify-end mt-3 border-t theme-border pt-2 gap-2">
-                                <button id="close-note-btn" class="theme-text-muted hover:text-keep-blue font-bold px-4 py-2 rounded cursor-pointer">إغلاق</button>
-                                <button id="save-note-btn" class="text-keep-blue font-bold px-4 py-2 rounded hover:bg-blue-500 hover:bg-opacity-10 cursor-pointer">حفظ</button>
+                                <button onclick="hideNoteActions()" class="theme-text-muted hover:text-keep-blue font-bold px-4 py-2 rounded cursor-pointer">إغلاق</button>
+                                <button onclick="saveNote()" class="text-keep-blue font-bold px-4 py-2 rounded hover:bg-blue-500 hover:bg-opacity-10 cursor-pointer">حفظ</button>
                             </div>
                         </div>
                     </div>
@@ -175,12 +173,12 @@
                 <div id="subjects-tab" class="tab-content fade-in hidden-force" style="display: none;">
                     <div class="max-w-2xl mx-auto mb-10 relative">
                         <div id="subject-creator" class="keep-input-box p-4 transition-all">
-                            <input type="text" id="subject-name" placeholder="اسم المادة (اضغط للإضافة)" class="keep-input font-bold">
+                            <input type="text" id="subject-name" placeholder="اسم المادة (اضغط للإضافة)" class="keep-input font-bold" onfocus="showSubjectActions()">
                             <div id="subject-extra" class="hidden-force mt-3">
                                 <input type="text" id="subject-dept" placeholder="القسم (مثال: مدني)" class="keep-input mb-3">
                                 <div class="flex justify-end border-t theme-border pt-2 gap-2">
-                                    <button id="close-subject-btn" class="theme-text-muted hover:text-keep-blue font-bold px-4 py-2 rounded cursor-pointer">إلغاء</button>
-                                    <button id="save-subject-btn" class="text-keep-blue font-bold px-4 py-2 rounded hover:bg-blue-500 hover:bg-opacity-10 cursor-pointer">إضافة المادة</button>
+                                    <button onclick="hideSubjectActions()" class="theme-text-muted hover:text-keep-blue font-bold px-4 py-2 rounded cursor-pointer">إلغاء</button>
+                                    <button onclick="saveSubject()" class="text-keep-blue font-bold px-4 py-2 rounded hover:bg-blue-500 hover:bg-opacity-10 cursor-pointer">إضافة المادة</button>
                                 </div>
                             </div>
                         </div>
@@ -233,7 +231,7 @@
                     <div class="keep-card p-4 mb-6 shadow-sm flex flex-col md:flex-row gap-3 items-center">
                         <input type="text" id="file-title" placeholder="وصف الملف (مثال: شيت 1)" class="theme-input p-2 rounded border theme-border flex-1 w-full bg-transparent outline-none">
                         <input type="file" id="subject-file-input" class="theme-text-muted w-full md:w-auto text-sm cursor-pointer">
-                        <button id="upload-file-btn" class="bg-keep-blue text-gray-900 font-bold px-6 py-2 rounded transition hover:opacity-80 w-full md:w-auto whitespace-nowrap cursor-pointer">رفع لـ Supabase</button>
+                        <button id="upload-file-btn" onclick="uploadFile()" class="bg-keep-blue text-gray-900 font-bold px-6 py-2 rounded transition hover:opacity-80 w-full md:w-auto whitespace-nowrap cursor-pointer">رفع لـ Supabase</button>
                     </div>
                     <div id="upload-progress-container" class="hidden-force mb-6 text-center text-sm theme-text font-bold text-blue-500">جاري الرفع... يرجى الانتظار</div>
                     <h3 class="font-bold mb-3 theme-text text-sm">الداتا المرفوعة:</h3>
@@ -255,7 +253,7 @@
                         <label class="block text-sm font-bold theme-text mb-2">إرفاق PDF للجدول (اختياري)</label>
                         <input type="file" id="schedule-pdf" accept=".pdf" class="theme-text-muted w-full text-sm cursor-pointer">
                     </div>
-                    <button id="save-schedule-btn" class="w-full bg-keep-blue text-gray-900 py-3 rounded-lg font-bold transition hover:opacity-80 cursor-pointer">حفظ التعديلات</button>
+                    <button id="save-schedule-btn" onclick="saveSchedule()" class="w-full bg-keep-blue text-gray-900 py-3 rounded-lg font-bold transition hover:opacity-80 cursor-pointer">حفظ التعديلات</button>
                     <div id="schedule-upload-status" class="text-sm mt-3 text-center font-bold"></div>
                 </div>
             </div>
@@ -270,7 +268,7 @@
                     <textarea id="edit-input-2" class="keep-input border-b theme-border pb-2 mb-4" rows="3" placeholder="المحتوى"></textarea>
                     <div class="flex justify-end gap-3 mt-4">
                         <button onclick="closeModal('edit-item-modal')" class="theme-text-muted font-bold px-4 py-2 rounded cursor-pointer">إلغاء</button>
-                        <button id="save-edit-btn" class="text-keep-blue font-bold px-4 py-2 hover:bg-blue-500 hover:bg-opacity-10 rounded cursor-pointer">حفظ التغييرات</button>
+                        <button onclick="saveEdit()" class="text-keep-blue font-bold px-4 py-2 hover:bg-blue-500 hover:bg-opacity-10 rounded cursor-pointer">حفظ التغييرات</button>
                     </div>
                 </div>
             </div>
@@ -291,7 +289,7 @@
                     <textarea id="supa-key" rows="4" class="w-full theme-input p-3 rounded border theme-border mb-4 font-mono text-xs" dir="ltr" placeholder="ey..."></textarea>
                     
                     <div class="flex gap-2">
-                        <button id="save-server-btn" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded font-bold transition cursor-pointer">حفظ والاتصال</button>
+                        <button onclick="saveServerConfig()" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded font-bold transition cursor-pointer">حفظ والاتصال</button>
                     </div>
                 </div>
             </div>
@@ -299,101 +297,50 @@
 
     </div>
 
-    <!-- ================= سكريبت Supabase والمنطق البرمجي ================= -->
+    <!-- ================= سكريبت Javascript ================= -->
     <script>
-        // دالة مساعدة قوية للتحكم بالظهور والإخفاء
+        // دالات العرض والإخفاء 
         function showElement(id, displayType = 'flex') {
             const el = document.getElementById(id);
-            if(el) {
-                el.classList.remove('hidden-force', 'hidden');
-                el.style.display = displayType;
-            }
+            if(el) { el.classList.remove('hidden-force', 'hidden'); el.style.display = displayType; }
         }
         function hideElement(id) {
             const el = document.getElementById(id);
-            if(el) {
-                el.classList.add('hidden-force');
-                el.style.display = 'none';
-            }
+            if(el) { el.classList.add('hidden-force'); el.style.display = 'none'; }
         }
+        function closeModal(id) { hideElement(id); }
 
-        window.closeModal = (id) => hideElement(id);
-
-        // 1. إعدادات السيرفر والاتصال
+        // المتغيرات العامة
         let supabase = null;
         let isConfigured = false;
+        let currentTheme = 'midnight';
+        let isMobileView = false;
+        let currentEditType = null, currentEditId = null;
+        let currentSubjectId = null;
+        const daysKeys = [
+            { id: 'sat', name: 'السبت' }, { id: 'sun', name: 'الأحد' }, { id: 'mon', name: 'الإثنين' }, { id: 'tue', name: 'الثلاثاء' }, 
+            { id: 'wed', name: 'الأربعاء' }, { id: 'thu', name: 'الخميس' }, { id: 'fri', name: 'الجمعة' }
+        ];
 
+        // تهيئة Supabase 
         try {
             const savedUrl = localStorage.getItem('supa_url') || "";
             const savedKey = localStorage.getItem('supa_key') || ""; 
-
-            if (savedUrl && savedUrl.includes('supabase.co')) {
-                if (window.supabase) {
-                    supabase = window.supabase.createClient(savedUrl, savedKey);
-                    isConfigured = true;
-                }
+            if (savedUrl && savedUrl.includes('supabase.co') && window.supabase) {
+                supabase = window.supabase.createClient(savedUrl, savedKey);
+                isConfigured = true;
             }
-        } catch (e) { console.error("خطأ في تهيئة السيرفر:", e); }
+        } catch (e) { 
+            console.error("خطأ في تهيئة السيرفر:", e); 
+        }
 
-        document.getElementById('server-toggle').addEventListener('click', () => {
-            document.getElementById('supa-url').value = localStorage.getItem('supa_url') || "";
-            document.getElementById('supa-key').value = localStorage.getItem('supa_key') || "";
-            showElement('server-modal');
-        });
-
-        document.getElementById('save-server-btn').addEventListener('click', () => {
-            const u = document.getElementById('supa-url').value.trim();
-            const k = document.getElementById('supa-key').value.trim();
-            if(!u || !k) { alert("يرجى إدخال الرابط والمفتاح!"); return; }
-            localStorage.setItem('supa_url', u);
-            localStorage.setItem('supa_key', k);
-            alert("تم حفظ بيانات السيرفر، سيتم تحديث الصفحة للاتصال.");
-            window.location.reload();
-        });
-
-        // 2. الثيمات والمظهر
-        let currentTheme = 'midnight';
-        document.getElementById('theme-toggle').addEventListener('click', () => {
-            document.body.classList.remove('theme-midnight', 'theme-dark', 'theme-light');
-            if(currentTheme === 'midnight') { currentTheme = 'dark'; document.body.classList.add('theme-dark'); }
-            else if(currentTheme === 'dark') { currentTheme = 'light'; document.body.classList.add('theme-light'); }
-            else { currentTheme = 'midnight'; document.body.classList.add('theme-midnight'); }
-        });
-
-        let isMobileView = false;
-        document.getElementById('view-toggle').addEventListener('click', () => {
-            isMobileView = !isMobileView;
-            const wrap = document.getElementById('app-wrapper');
-            if(isMobileView) { 
-                wrap.classList.add('mobile-mode'); 
-            } else { 
-                wrap.classList.remove('mobile-mode'); 
-            }
-        });
-
-        document.getElementById('menu-toggle').addEventListener('click', () => {
-            const sidebar = document.getElementById('sidebar');
-            if(sidebar.style.display === 'none' || sidebar.classList.contains('hidden-force')) {
-                sidebar.classList.remove('hidden-force');
-                sidebar.style.display = 'flex';
-            } else {
-                sidebar.classList.add('hidden-force');
-                sidebar.style.display = 'none';
-            }
-        });
-
-        // 3. نظام الدخول القوي والمباشر
+        // تسجيل الدخول
         function checkAuth() {
             try {
                 const pwd = document.getElementById('password-input').value.trim();
-                
                 if(pwd === '#ZMsd42d*' || pwd === 'ZMsd42d*') {
-                    // إخفاء شاشة الدخول بقوة
                     hideElement('login-screen');
-                    
-                    // إظهار الموقع بقوة
                     showElement('app-wrapper', 'flex');
-                    
                     if(!isConfigured) {
                         showElement('supabase-warning', 'block');
                     } else {
@@ -403,45 +350,70 @@
                     showElement('login-error', 'block');
                 }
             } catch (e) {
-                alert("حدث خطأ تقني، تأكد من أنك تفتح الملف عن طريق Google Chrome.");
+                alert("حدث خطأ تقني غير متوقع.");
             }
         }
 
-        document.getElementById('login-btn').addEventListener('click', checkAuth);
-        document.getElementById('password-input').addEventListener('keypress', (e) => { if(e.key === 'Enter') checkAuth(); });
+        // واجهة المستخدم والتنقل
+        function toggleTheme() {
+            document.body.classList.remove('theme-midnight', 'theme-dark', 'theme-light');
+            if(currentTheme === 'midnight') { currentTheme = 'dark'; document.body.classList.add('theme-dark'); }
+            else if(currentTheme === 'dark') { currentTheme = 'light'; document.body.classList.add('theme-light'); }
+            else { currentTheme = 'midnight'; document.body.classList.add('theme-midnight'); }
+        }
 
-        // 4. التنقل بين الصفحات
-        window.switchTab = function(tabId) {
-            hideElement('notes-tab');
-            hideElement('subjects-tab');
-            hideElement('schedule-tab');
-            
+        function toggleViewMode() {
+            isMobileView = !isMobileView;
+            const wrap = document.getElementById('app-wrapper');
+            if(isMobileView) wrap.classList.add('mobile-mode'); else wrap.classList.remove('mobile-mode');
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if(sidebar.style.display === 'none' || sidebar.classList.contains('hidden-force')) {
+                sidebar.classList.remove('hidden-force'); sidebar.style.display = 'flex';
+            } else {
+                sidebar.classList.add('hidden-force'); sidebar.style.display = 'none';
+            }
+        }
+
+        function switchTab(tabId) {
+            hideElement('notes-tab'); hideElement('subjects-tab'); hideElement('schedule-tab');
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.style.backgroundColor = 'transparent'; btn.style.color = 'var(--text-muted)'; btn.classList.remove('active');
             });
-            
             showElement(tabId, 'block');
-            
             const activeBtn = document.getElementById('btn-' + tabId);
             if(activeBtn) {
                 activeBtn.classList.add('active');
                 activeBtn.style.backgroundColor = 'rgba(138, 180, 248, 0.1)'; 
                 activeBtn.style.color = 'var(--text-main)';
             }
-            if(window.innerWidth < 768) {
-                hideElement('sidebar');
-            }
+            if(window.innerWidth < 768) { hideElement('sidebar'); }
         }
 
-        const noteBody = document.getElementById('note-body'), noteTitle = document.getElementById('note-title'), noteActions = document.getElementById('note-actions');
-        noteBody.addEventListener('focus', () => { showElement('note-title', 'block'); showElement('note-actions', 'flex'); });
-        document.getElementById('close-note-btn').addEventListener('click', () => { hideElement('note-title'); hideElement('note-actions'); noteTitle.value = ''; noteBody.value = ''; noteBody.style.height = ''; });
+        function showNoteActions() { showElement('note-title', 'block'); showElement('note-actions', 'flex'); }
+        function hideNoteActions() { hideElement('note-title'); hideElement('note-actions'); document.getElementById('note-title').value = ''; document.getElementById('note-body').value = ''; document.getElementById('note-body').style.height = ''; }
+        function showSubjectActions() { showElement('subject-extra', 'block'); }
+        function hideSubjectActions() { hideElement('subject-extra'); document.getElementById('subject-name').value = ''; document.getElementById('subject-dept').value = ''; }
+        
+        function openServerModal() {
+            document.getElementById('supa-url').value = localStorage.getItem('supa_url') || "";
+            document.getElementById('supa-key').value = localStorage.getItem('supa_key') || "";
+            showElement('server-modal');
+        }
 
-        const subjName = document.getElementById('subject-name'), subjExtra = document.getElementById('subject-extra');
-        subjName.addEventListener('focus', () => showElement('subject-extra', 'block'));
-        document.getElementById('close-subject-btn').addEventListener('click', () => { hideElement('subject-extra'); subjName.value = ''; document.getElementById('subject-dept').value = ''; });
+        function saveServerConfig() {
+            const u = document.getElementById('supa-url').value.trim();
+            const k = document.getElementById('supa-key').value.trim();
+            if(!u || !k) { alert("يرجى إدخال الرابط والمفتاح!"); return; }
+            localStorage.setItem('supa_url', u);
+            localStorage.setItem('supa_key', k);
+            alert("تم حفظ بيانات السيرفر بنجاح، سيتم تحديث الصفحة للاتصال.");
+            window.location.reload();
+        }
 
-        // 5. المنطق البرمجي (جلب وحفظ البيانات من Supabase)
+        // قواعد البيانات (المذكرات والمواد)
         async function fetchNotes() {
             if(!isConfigured || !supabase) return;
             try {
@@ -449,11 +421,13 @@
                 const grid = document.getElementById('notes-grid'); grid.innerHTML = '';
                 if(data && data.length > 0) {
                     data.forEach(d => {
+                        const safeTitle = (d.title||'').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                        const safeBody = (d.body||'').replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, '\\n');
                         const el = document.createElement('div'); el.className = "keep-card p-4 masonry-item group";
                         el.innerHTML = `
                             <h3 class="font-bold mb-2">${d.title}</h3><p class="text-sm theme-text-muted whitespace-pre-wrap">${d.body}</p>
                             <div class="keep-card-actions absolute bottom-2 left-2 flex gap-2">
-                                <button onclick="openEditModal('note', '${d.id}', \`${(d.title||'').replace(/`/g, '\\`')}\`, \`${(d.body||'').replace(/`/g, '\\`')}\`)" class="w-8 h-8 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 theme-text-muted flex items-center justify-center cursor-pointer"><i class="fa-solid fa-pen text-xs"></i></button>
+                                <button onclick="openEditModal('note', '${d.id}', '${safeTitle}', '${safeBody}')" class="w-8 h-8 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 theme-text-muted flex items-center justify-center cursor-pointer"><i class="fa-solid fa-pen text-xs"></i></button>
                                 <button onclick="deleteItem('notes', '${d.id}')" class="w-8 h-8 rounded-full hover:bg-red-100 hover:text-red-500 theme-text-muted flex items-center justify-center cursor-pointer"><i class="fa-solid fa-trash text-xs"></i></button>
                             </div>`;
                         grid.appendChild(el);
@@ -469,13 +443,15 @@
                 const grid = document.getElementById('subjects-grid'); grid.innerHTML = '';
                 if(data && data.length > 0) {
                     data.forEach(d => {
+                        const safeName = (d.name||'').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                        const safeDept = (d.department||'').replace(/'/g, "\\'").replace(/"/g, '&quot;');
                         const el = document.createElement('div'); el.className = "keep-card p-4 masonry-item group cursor-pointer flex flex-col";
                         el.innerHTML = `
-                            <div onclick="openSubjectModal('${d.id}', '${d.name}', '${d.department}')" class="flex-1">
+                            <div onclick="openSubjectModal('${d.id}', '${safeName}', '${safeDept}')" class="flex-1">
                                 <h3 class="text-lg font-bold mb-1">${d.name}</h3><span class="text-xs bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded theme-text-muted">${d.department}</span>
                             </div>
                             <div class="keep-card-actions absolute top-2 left-2 flex gap-1">
-                                <button onclick="event.stopPropagation(); openEditModal('subject', '${d.id}', '${d.name}', '${d.department}')" class="w-7 h-7 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 theme-text-muted cursor-pointer"><i class="fa-solid fa-pen text-xs"></i></button>
+                                <button onclick="event.stopPropagation(); openEditModal('subject', '${d.id}', '${safeName}', '${safeDept}')" class="w-7 h-7 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 theme-text-muted cursor-pointer"><i class="fa-solid fa-pen text-xs"></i></button>
                                 <button onclick="event.stopPropagation(); deleteItem('subjects', '${d.id}')" class="w-7 h-7 rounded-full hover:bg-red-100 hover:text-red-500 theme-text-muted cursor-pointer"><i class="fa-solid fa-trash text-xs"></i></button>
                             </div>`;
                         grid.appendChild(el);
@@ -484,32 +460,27 @@
             } catch(e) { console.error(e); }
         }
 
-        function initApp() {
-            fetchNotes(); fetchSubjects(); loadSchedule();
-        }
+        function initApp() { fetchNotes(); fetchSubjects(); loadSchedule(); }
 
-        document.getElementById('save-note-btn').addEventListener('click', async () => {
-            const t = noteTitle.value.trim(), b = noteBody.value.trim();
+        async function saveNote() {
+            const t = document.getElementById('note-title').value.trim(), b = document.getElementById('note-body').value.trim();
             if(!t && !b) return;
             try {
                 const { error } = await supabase.from('notes').insert([{ title: t, body: b }]);
-                if(!error) { document.getElementById('close-note-btn').click(); fetchNotes(); } else { alert("حدث خطأ في الإضافة."); }
+                if(!error) { hideNoteActions(); fetchNotes(); } else { alert("حدث خطأ في الإضافة."); }
             } catch (e) { alert("خطأ في الاتصال"); }
-        });
+        }
 
-        document.getElementById('save-subject-btn').addEventListener('click', async () => {
-            const n = subjName.value.trim(), d = document.getElementById('subject-dept').value.trim();
+        async function saveSubject() {
+            const n = document.getElementById('subject-name').value.trim(), d = document.getElementById('subject-dept').value.trim();
             if(!n) return;
             try {
                 const { error } = await supabase.from('subjects').insert([{ name: n, department: d }]);
-                if(!error) { document.getElementById('close-subject-btn').click(); fetchSubjects(); } else { alert("حدث خطأ في الإضافة."); }
+                if(!error) { hideSubjectActions(); fetchSubjects(); } else { alert("حدث خطأ في الإضافة."); }
             } catch (e) { alert("خطأ في الاتصال"); }
-        });
+        }
 
-        // 6. نظام التعديل والحذف
-        let currentEditType = null, currentEditId = null;
-
-        window.openEditModal = function(type, id, val1, val2) {
+        function openEditModal(type, id, val1, val2) {
             currentEditType = type; currentEditId = id;
             showElement('edit-item-modal');
             document.getElementById('edit-modal-title').innerText = type === 'note' ? 'تعديل المذكرة' : 'تعديل المادة';
@@ -517,10 +488,9 @@
             document.getElementById('edit-input-2').value = val2 || '';
         }
 
-        document.getElementById('save-edit-btn').addEventListener('click', async () => {
+        async function saveEdit() {
             const val1 = document.getElementById('edit-input-1').value.trim(), val2 = document.getElementById('edit-input-2').value.trim();
             if(!val1) return;
-            
             try {
                 if(currentEditType === 'note') {
                     await supabase.from('notes').update({ title: val1, body: val2 }).eq('id', currentEditId);
@@ -531,9 +501,9 @@
                 }
                 hideElement('edit-item-modal');
             } catch (e) { alert("خطأ في التعديل"); }
-        });
+        }
 
-        window.deleteItem = async function(type, id) {
+        async function deleteItem(type, id) {
             if(!confirm('هل أنت متأكد من الحذف النهائي؟')) return;
             try {
                 const { error } = await supabase.from(type).delete().eq('id', id);
@@ -542,9 +512,7 @@
             } catch (e) { alert("خطأ في الاتصال"); }
         }
 
-        // 7. داتا وملفات المادة 
-        let currentSubjectId = null;
-        
+        // ملفات المادة
         async function fetchSubjectFiles(id) {
             try {
                 const { data } = await supabase.from('files').select('*').eq('subject_id', id).order('created_at', { ascending: false });
@@ -563,14 +531,14 @@
             } catch(e) { console.error(e); }
         }
 
-        window.openSubjectModal = function(id, name, dept) {
+        function openSubjectModal(id, name, dept) {
             currentSubjectId = id;
             document.getElementById('modal-subject-name').innerText = name; document.getElementById('modal-subject-dept').innerText = dept;
             showElement('subject-modal');
             fetchSubjectFiles(id);
         }
 
-        window.deleteFile = async function(fileId, filePath) {
+        async function deleteFile(fileId, filePath) {
             if(!confirm('هل أنت متأكد من حذف هذا الملف؟ لا يمكن التراجع.')) return;
             try {
                 await supabase.storage.from('materials').remove([filePath]);
@@ -579,7 +547,7 @@
             } catch (e) { alert("خطأ في الحذف"); }
         }
 
-        document.getElementById('upload-file-btn').addEventListener('click', async () => {
+        async function uploadFile() {
             const fileInput = document.getElementById('subject-file-input'); const file = fileInput.files[0];
             const title = document.getElementById('file-title').value.trim();
             if(!file || !title) { alert("يرجى اختيار ملف وكتابة وصف له."); return; }
@@ -604,14 +572,9 @@
             
             hideElement('upload-progress-container');
             uploadBtn.disabled = false;
-        });
+        }
 
-        // 8. الجدول المدرسي الأسبوعي
-        const daysKeys = [
-            { id: 'sat', name: 'السبت' }, { id: 'sun', name: 'الأحد' }, { id: 'mon', name: 'الإثنين' }, { id: 'tue', name: 'الثلاثاء' }, 
-            { id: 'wed', name: 'الأربعاء' }, { id: 'thu', name: 'الخميس' }, { id: 'fri', name: 'الجمعة' }
-        ];
-
+        // الجدول
         async function loadSchedule() {
             if(!isConfigured || !supabase) return;
             try {
@@ -623,17 +586,14 @@
                 daysKeys.forEach(d => { tbody.innerHTML += `<tr><td class="font-bold text-keep-blue">${d.name}</td><td>${daysData[d.id] || '-'}</td></tr>`; });
 
                 if(data && data.pdf_url) { 
-                    btn.href = data.pdf_url; 
-                    showElement('download-schedule-btn', 'inline-block'); 
-                    hideElement('no-schedule-pdf'); 
+                    btn.href = data.pdf_url; showElement('download-schedule-btn', 'inline-block'); hideElement('no-schedule-pdf'); 
                 } else { 
-                    hideElement('download-schedule-btn'); 
-                    showElement('no-schedule-pdf', 'block'); 
+                    hideElement('download-schedule-btn'); showElement('no-schedule-pdf', 'block'); 
                 }
             } catch (e) { console.error(e); }
         }
 
-        window.openScheduleModal = async function() {
+        async function openScheduleModal() {
             try {
                 const container = document.getElementById('schedule-inputs-container'); container.innerHTML = '';
                 const { data } = await supabase.from('schedule').select('*').eq('id', 'main').single();
@@ -650,7 +610,7 @@
             } catch (e) { console.error(e); }
         }
 
-        document.getElementById('save-schedule-btn').addEventListener('click', async () => {
+        async function saveSchedule() {
             const statusBox = document.getElementById('schedule-upload-status'); const file = document.getElementById('schedule-pdf').files[0];
             const btn = document.getElementById('save-schedule-btn');
             
@@ -676,8 +636,7 @@
             } catch(e) { statusBox.innerText = "حدث خطأ أثناء الحفظ."; statusBox.className = "text-sm mt-3 text-center text-red-500"; }
             
             btn.disabled = false;
-        });
-
+        }
     </script>
 </body>
 </html>
