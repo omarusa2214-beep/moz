@@ -102,9 +102,9 @@
             <h1 class="text-2xl font-bold mb-2 text-white">Engineering Keep</h1>
             <p class="text-sm text-gray-300 mb-6">يرجى تأكيد الدخول (الباسورد جاهز)</p>
             
-            <input type="password" id="password-input" value="#ZMsd42d*" placeholder="كلمة المرور..." class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-600 text-white focus:outline-none focus:border-keep-blue mb-4 text-center text-lg" dir="ltr" onkeypress="if(event.key === 'Enter') checkAuth()">
+            <input type="password" id="password-input" value="#ZMsd42d*" placeholder="كلمة المرور..." class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-600 text-white focus:outline-none focus:border-keep-blue mb-4 text-center text-lg" dir="ltr">
             
-            <button id="login-btn" onclick="checkAuth()" class="w-full bg-keep-blue hover:bg-blue-500 text-gray-900 font-bold py-3 rounded-lg transition duration-300 shadow cursor-pointer">دخول للمنصة</button>
+            <button id="login-btn" class="w-full bg-keep-blue hover:bg-blue-500 text-gray-900 font-bold py-3 rounded-lg transition duration-300 shadow cursor-pointer">دخول للمنصة</button>
             <p id="login-error" class="text-red-400 text-sm mt-3 hidden-force font-bold">كلمة المرور غير صحيحة!</p>
         </div>
     </div>
@@ -115,7 +115,7 @@
         <!-- الهيدر العلوي -->
         <header class="theme-header shadow-sm relative z-10 px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-3">
             <div class="flex items-center gap-3 w-full md:w-auto">
-                <button onclick="toggleSidebar()" class="text-xl theme-text-muted hover:text-keep-blue transition p-2 rounded-full theme-hover cursor-pointer"><i class="fa-solid fa-bars"></i></button>
+                <button id="menu-toggle" class="text-xl theme-text-muted hover:text-keep-blue transition p-2 rounded-full theme-hover cursor-pointer"><i class="fa-solid fa-bars"></i></button>
                 <div class="flex items-center gap-2">
                     <img src="https://www.gstatic.com/images/branding/product/1x/keep_2020q4_48dp.png" alt="Keep" class="w-8 h-8 opacity-90 filter hue-rotate-[200deg]">
                     <h1 class="text-xl font-bold theme-text">الهندسة Notes</h1>
@@ -124,22 +124,22 @@
 
             <!-- أزرار التحكم -->
             <div class="flex items-center gap-2">
-                <button onclick="openServerModal()" class="theme-text-muted hover:text-green-500 p-2 rounded-full theme-hover transition cursor-pointer" title="إعدادات Supabase"><i class="fa-solid fa-server text-lg"></i></button>
-                <button onclick="toggleViewMode()" class="theme-text-muted hover:text-yellow-500 p-2 rounded-full theme-hover transition cursor-pointer" title="وضع الموبايل/اللاب"><i class="fa-solid fa-mobile-screen text-lg"></i></button>
-                <button onclick="toggleTheme()" class="theme-text-muted hover:text-blue-400 p-2 rounded-full theme-hover transition cursor-pointer" title="تغيير المظهر"><i class="fa-solid fa-moon text-lg"></i></button>
+                <button id="server-toggle" class="theme-text-muted hover:text-green-500 p-2 rounded-full theme-hover transition cursor-pointer" title="إعدادات Supabase"><i class="fa-solid fa-server text-lg"></i></button>
+                <button id="view-toggle" class="theme-text-muted hover:text-yellow-500 p-2 rounded-full theme-hover transition cursor-pointer" title="وضع الموبايل/اللاب"><i class="fa-solid fa-mobile-screen text-lg"></i></button>
+                <button id="theme-toggle" class="theme-text-muted hover:text-blue-400 p-2 rounded-full theme-hover transition cursor-pointer" title="تغيير المظهر"><i class="fa-solid fa-moon text-lg"></i></button>
             </div>
         </header>
 
         <div class="flex flex-1 overflow-hidden" style="flex: 1; display: flex; overflow: hidden;">
             <!-- القائمة الجانبية (Sidebar) -->
             <nav id="sidebar" class="w-20 md:w-64 flex-shrink-0 theme-panel border-l theme-border transition-all duration-300 py-4 flex flex-col gap-1 z-10">
-                <button onclick="switchTab('notes-tab')" id="btn-notes-tab" class="tab-btn flex items-center gap-4 px-6 py-3 rounded-r-full hover:bg-opacity-20 transition theme-text font-bold cursor-pointer" style="background-color: rgba(138, 180, 248, 0.1); color: var(--text-main);">
+                <button id="btn-notes-tab" class="tab-btn flex items-center gap-4 px-6 py-3 rounded-r-full hover:bg-opacity-20 transition theme-text font-bold cursor-pointer" style="background-color: rgba(138, 180, 248, 0.1); color: var(--text-main);">
                     <i class="fa-regular fa-lightbulb text-xl"></i> <span class="hidden md:inline">المذكرات</span>
                 </button>
-                <button onclick="switchTab('subjects-tab')" id="btn-subjects-tab" class="tab-btn flex items-center gap-4 px-6 py-3 rounded-r-full hover:bg-gray-500 hover:bg-opacity-10 transition theme-text-muted font-bold cursor-pointer">
+                <button id="btn-subjects-tab" class="tab-btn flex items-center gap-4 px-6 py-3 rounded-r-full hover:bg-gray-500 hover:bg-opacity-10 transition theme-text-muted font-bold cursor-pointer">
                     <i class="fa-solid fa-book-bookmark text-xl"></i> <span class="hidden md:inline">المواد والداتا</span>
                 </button>
-                <button onclick="switchTab('schedule-tab')" id="btn-schedule-tab" class="tab-btn flex items-center gap-4 px-6 py-3 rounded-r-full hover:bg-gray-500 hover:bg-opacity-10 transition theme-text-muted font-bold cursor-pointer">
+                <button id="btn-schedule-tab" class="tab-btn flex items-center gap-4 px-6 py-3 rounded-r-full hover:bg-gray-500 hover:bg-opacity-10 transition theme-text-muted font-bold cursor-pointer">
                     <i class="fa-regular fa-calendar-days text-xl"></i> <span class="hidden md:inline">الجدول الدراسي</span>
                 </button>
             </nav>
@@ -157,10 +157,10 @@
                     <div class="max-w-2xl mx-auto mb-10 relative">
                         <div id="note-creator" class="keep-input-box p-4 cursor-text transition-all">
                             <input type="text" id="note-title" placeholder="العنوان" class="keep-input text-lg font-bold mb-3 hidden-force">
-                            <textarea id="note-body" placeholder="إضافة مذكرة..." rows="1" class="keep-input" onfocus="showNoteActions()" oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"></textarea>
+                            <textarea id="note-body" placeholder="إضافة مذكرة..." rows="1" class="keep-input" oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"></textarea>
                             <div id="note-actions" class="hidden-force flex justify-end mt-3 border-t theme-border pt-2 gap-2">
-                                <button onclick="hideNoteActions()" class="theme-text-muted hover:text-keep-blue font-bold px-4 py-2 rounded cursor-pointer">إغلاق</button>
-                                <button onclick="saveNote()" class="text-keep-blue font-bold px-4 py-2 rounded hover:bg-blue-500 hover:bg-opacity-10 cursor-pointer">حفظ</button>
+                                <button id="close-note-btn" class="theme-text-muted hover:text-keep-blue font-bold px-4 py-2 rounded cursor-pointer">إغلاق</button>
+                                <button id="save-note-btn" class="text-keep-blue font-bold px-4 py-2 rounded hover:bg-blue-500 hover:bg-opacity-10 cursor-pointer">حفظ</button>
                             </div>
                         </div>
                     </div>
@@ -173,12 +173,12 @@
                 <div id="subjects-tab" class="tab-content fade-in hidden-force" style="display: none;">
                     <div class="max-w-2xl mx-auto mb-10 relative">
                         <div id="subject-creator" class="keep-input-box p-4 transition-all">
-                            <input type="text" id="subject-name" placeholder="اسم المادة (اضغط للإضافة)" class="keep-input font-bold" onfocus="showSubjectActions()">
+                            <input type="text" id="subject-name" placeholder="اسم المادة (اضغط للإضافة)" class="keep-input font-bold">
                             <div id="subject-extra" class="hidden-force mt-3">
                                 <input type="text" id="subject-dept" placeholder="القسم (مثال: مدني)" class="keep-input mb-3">
                                 <div class="flex justify-end border-t theme-border pt-2 gap-2">
-                                    <button onclick="hideSubjectActions()" class="theme-text-muted hover:text-keep-blue font-bold px-4 py-2 rounded cursor-pointer">إلغاء</button>
-                                    <button onclick="saveSubject()" class="text-keep-blue font-bold px-4 py-2 rounded hover:bg-blue-500 hover:bg-opacity-10 cursor-pointer">إضافة المادة</button>
+                                    <button id="close-subject-btn" class="theme-text-muted hover:text-keep-blue font-bold px-4 py-2 rounded cursor-pointer">إلغاء</button>
+                                    <button id="save-subject-btn" class="text-keep-blue font-bold px-4 py-2 rounded hover:bg-blue-500 hover:bg-opacity-10 cursor-pointer">إضافة المادة</button>
                                 </div>
                             </div>
                         </div>
@@ -191,7 +191,7 @@
                     <div class="max-w-5xl mx-auto">
                         <div class="flex justify-between items-center mb-6">
                             <h2 class="text-2xl font-bold theme-text"><i class="fa-solid fa-table-list me-2 text-keep-blue"></i> الجدول الأسبوعي</h2>
-                            <button onclick="openScheduleModal()" class="bg-transparent border border-gray-500 text-gray-500 hover:bg-gray-500 hover:text-white px-4 py-2 rounded-lg font-bold transition theme-border theme-text cursor-pointer">
+                            <button id="open-schedule-modal-btn" class="bg-transparent border border-gray-500 text-gray-500 hover:bg-gray-500 hover:text-white px-4 py-2 rounded-lg font-bold transition theme-border theme-text cursor-pointer">
                                 <i class="fa-solid fa-pen"></i> تعديل
                             </button>
                         </div>
@@ -225,13 +225,13 @@
                         <h2 id="modal-subject-name" class="text-xl font-bold theme-text">اسم المادة</h2>
                         <p id="modal-subject-dept" class="text-sm theme-text-muted">القسم</p>
                     </div>
-                    <button onclick="closeModal('subject-modal')" class="theme-text-muted hover:text-red-400 text-2xl transition cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+                    <button id="close-subject-modal-btn" class="theme-text-muted hover:text-red-400 text-2xl transition cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
                 </div>
                 <div class="p-4 sm:p-6 overflow-y-auto flex-1">
                     <div class="keep-card p-4 mb-6 shadow-sm flex flex-col md:flex-row gap-3 items-center">
                         <input type="text" id="file-title" placeholder="وصف الملف (مثال: شيت 1)" class="theme-input p-2 rounded border theme-border flex-1 w-full bg-transparent outline-none">
                         <input type="file" id="subject-file-input" class="theme-text-muted w-full md:w-auto text-sm cursor-pointer">
-                        <button id="upload-file-btn" onclick="uploadFile()" class="bg-keep-blue text-gray-900 font-bold px-6 py-2 rounded transition hover:opacity-80 w-full md:w-auto whitespace-nowrap cursor-pointer">رفع لـ Supabase</button>
+                        <button id="upload-file-btn" class="bg-keep-blue text-gray-900 font-bold px-6 py-2 rounded transition hover:opacity-80 w-full md:w-auto whitespace-nowrap cursor-pointer">رفع لـ Supabase</button>
                     </div>
                     <div id="upload-progress-container" class="hidden-force mb-6 text-center text-sm theme-text font-bold text-blue-500">جاري الرفع... يرجى الانتظار</div>
                     <h3 class="font-bold mb-3 theme-text text-sm">الداتا المرفوعة:</h3>
@@ -245,7 +245,7 @@
             <div class="theme-panel w-full max-w-2xl rounded-xl shadow-2xl flex flex-col max-h-[90vh] border theme-border fade-in">
                 <div class="border-b theme-border p-4 flex justify-between items-center">
                     <h2 class="text-lg font-bold theme-text">تعديل الجدول</h2>
-                    <button onclick="closeModal('schedule-edit-modal')" class="theme-text-muted hover:text-red-400 text-2xl cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+                    <button id="close-schedule-edit-modal" class="theme-text-muted hover:text-red-400 text-2xl cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
                 </div>
                 <div class="p-6 overflow-y-auto">
                     <div class="space-y-4 mb-6" id="schedule-inputs-container"></div>
@@ -253,7 +253,7 @@
                         <label class="block text-sm font-bold theme-text mb-2">إرفاق PDF للجدول (اختياري)</label>
                         <input type="file" id="schedule-pdf" accept=".pdf" class="theme-text-muted w-full text-sm cursor-pointer">
                     </div>
-                    <button id="save-schedule-btn" onclick="saveSchedule()" class="w-full bg-keep-blue text-gray-900 py-3 rounded-lg font-bold transition hover:opacity-80 cursor-pointer">حفظ التعديلات</button>
+                    <button id="save-schedule-btn" class="w-full bg-keep-blue text-gray-900 py-3 rounded-lg font-bold transition hover:opacity-80 cursor-pointer">حفظ التعديلات</button>
                     <div id="schedule-upload-status" class="text-sm mt-3 text-center font-bold"></div>
                 </div>
             </div>
@@ -267,8 +267,8 @@
                     <input type="text" id="edit-input-1" class="keep-input border-b theme-border pb-2 mb-4 font-bold" placeholder="العنوان">
                     <textarea id="edit-input-2" class="keep-input border-b theme-border pb-2 mb-4" rows="3" placeholder="المحتوى"></textarea>
                     <div class="flex justify-end gap-3 mt-4">
-                        <button onclick="closeModal('edit-item-modal')" class="theme-text-muted font-bold px-4 py-2 rounded cursor-pointer">إلغاء</button>
-                        <button onclick="saveEdit()" class="text-keep-blue font-bold px-4 py-2 hover:bg-blue-500 hover:bg-opacity-10 rounded cursor-pointer">حفظ التغييرات</button>
+                        <button id="cancel-edit-btn" class="theme-text-muted font-bold px-4 py-2 rounded cursor-pointer">إلغاء</button>
+                        <button id="save-edit-btn" class="text-keep-blue font-bold px-4 py-2 hover:bg-blue-500 hover:bg-opacity-10 rounded cursor-pointer">حفظ التغييرات</button>
                     </div>
                 </div>
             </div>
@@ -279,7 +279,7 @@
             <div class="theme-panel w-full max-w-lg rounded-xl shadow-2xl flex flex-col fade-in border theme-border">
                 <div class="border-b theme-border p-4 flex justify-between items-center">
                     <h2 class="text-lg font-bold theme-text"><i class="fa-solid fa-server me-2 text-green-500"></i> إعدادات Supabase</h2>
-                    <button onclick="closeModal('server-modal')" class="theme-text-muted hover:text-red-400 text-xl cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+                    <button id="close-server-modal-btn" class="theme-text-muted hover:text-red-400 text-xl cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
                 </div>
                 <div class="p-6">
                     <label class="block text-sm font-bold theme-text mb-1">Project URL:</label>
@@ -289,7 +289,7 @@
                     <textarea id="supa-key" rows="4" class="w-full theme-input p-3 rounded border theme-border mb-4 font-mono text-xs" dir="ltr" placeholder="ey..."></textarea>
                     
                     <div class="flex gap-2">
-                        <button onclick="saveServerConfig()" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded font-bold transition cursor-pointer">حفظ والاتصال</button>
+                        <button id="save-server-btn" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded font-bold transition cursor-pointer">حفظ والاتصال</button>
                     </div>
                 </div>
             </div>
@@ -297,127 +297,90 @@
 
     </div>
 
-    <!-- ================= سكريبت Javascript ================= -->
+    <!-- ================= سكريبت Javascript القوي والآمن ================= -->
     <script>
-        // دالات العرض والإخفاء 
-        function showElement(id, displayType = 'flex') {
+        // تعريف كافة الدوال على مستوى النافذة (Global Window) أولاً لتجنب أي خطأ "Not Defined" 
+        window.showElement = function(id, displayType = 'flex') {
             const el = document.getElementById(id);
             if(el) { el.classList.remove('hidden-force', 'hidden'); el.style.display = displayType; }
-        }
-        function hideElement(id) {
+        };
+
+        window.hideElement = function(id) {
             const el = document.getElementById(id);
             if(el) { el.classList.add('hidden-force'); el.style.display = 'none'; }
-        }
-        function closeModal(id) { hideElement(id); }
+        };
 
-        // المتغيرات العامة
-        let supabase = null;
-        let isConfigured = false;
-        let currentTheme = 'midnight';
-        let isMobileView = false;
-        let currentEditType = null, currentEditId = null;
-        let currentSubjectId = null;
-        const daysKeys = [
-            { id: 'sat', name: 'السبت' }, { id: 'sun', name: 'الأحد' }, { id: 'mon', name: 'الإثنين' }, { id: 'tue', name: 'الثلاثاء' }, 
-            { id: 'wed', name: 'الأربعاء' }, { id: 'thu', name: 'الخميس' }, { id: 'fri', name: 'الجمعة' }
+        window.closeModal = function(id) { window.hideElement(id); };
+
+        window.supabaseInstance = null;
+        window.isConfigured = false;
+        window.currentTheme = 'midnight';
+        window.isMobileView = false;
+        window.currentEditType = null;
+        window.currentEditId = null;
+        window.currentSubjectId = null;
+        window.daysKeys = [
+            { id: 'sat', name: 'السبت' }, { id: 'sun', name: 'الأحد' }, { id: 'mon', name: 'الإثنين' }, 
+            { id: 'tue', name: 'الثلاثاء' }, { id: 'wed', name: 'الأربعاء' }, { id: 'thu', name: 'الخميس' }, { id: 'fri', name: 'الجمعة' }
         ];
 
-        // تهيئة Supabase 
-        try {
-            const savedUrl = localStorage.getItem('supa_url') || "";
-            const savedKey = localStorage.getItem('supa_key') || ""; 
-            if (savedUrl && savedUrl.includes('supabase.co') && window.supabase) {
-                supabase = window.supabase.createClient(savedUrl, savedKey);
-                isConfigured = true;
-            }
-        } catch (e) { 
-            console.error("خطأ في تهيئة السيرفر:", e); 
-        }
-
-        // تسجيل الدخول
-        function checkAuth() {
+        // التهيئة المبدئية لـ Supabase
+        window.initSupabase = function() {
             try {
-                const pwd = document.getElementById('password-input').value.trim();
+                const savedUrl = localStorage.getItem('supa_url') || "";
+                const savedKey = localStorage.getItem('supa_key') || ""; 
+                if (savedUrl && savedUrl.includes('supabase.co') && window.supabase) {
+                    window.supabaseInstance = window.supabase.createClient(savedUrl, savedKey);
+                    window.isConfigured = true;
+                }
+            } catch (e) { console.error("خطأ في التهيئة:", e); }
+        };
+
+        // دالة التحقق من الدخول
+        window.checkAuth = function() {
+            try {
+                const pwdInput = document.getElementById('password-input');
+                if(!pwdInput) return;
+                const pwd = pwdInput.value.trim();
+                
                 if(pwd === '#ZMsd42d*' || pwd === 'ZMsd42d*') {
-                    hideElement('login-screen');
-                    showElement('app-wrapper', 'flex');
-                    if(!isConfigured) {
-                        showElement('supabase-warning', 'block');
+                    window.hideElement('login-screen');
+                    window.showElement('app-wrapper', 'flex');
+                    if(!window.isConfigured) {
+                        window.showElement('supabase-warning', 'block');
                     } else {
-                        initApp();
+                        window.initApp();
                     }
                 } else { 
-                    showElement('login-error', 'block');
+                    window.showElement('login-error', 'block');
                 }
             } catch (e) {
-                alert("حدث خطأ تقني غير متوقع.");
+                console.error(e);
+                alert("حدث خطأ تقني.");
             }
-        }
+        };
 
-        // واجهة المستخدم والتنقل
-        function toggleTheme() {
-            document.body.classList.remove('theme-midnight', 'theme-dark', 'theme-light');
-            if(currentTheme === 'midnight') { currentTheme = 'dark'; document.body.classList.add('theme-dark'); }
-            else if(currentTheme === 'dark') { currentTheme = 'light'; document.body.classList.add('theme-light'); }
-            else { currentTheme = 'midnight'; document.body.classList.add('theme-midnight'); }
-        }
-
-        function toggleViewMode() {
-            isMobileView = !isMobileView;
-            const wrap = document.getElementById('app-wrapper');
-            if(isMobileView) wrap.classList.add('mobile-mode'); else wrap.classList.remove('mobile-mode');
-        }
-
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            if(sidebar.style.display === 'none' || sidebar.classList.contains('hidden-force')) {
-                sidebar.classList.remove('hidden-force'); sidebar.style.display = 'flex';
-            } else {
-                sidebar.classList.add('hidden-force'); sidebar.style.display = 'none';
-            }
-        }
-
-        function switchTab(tabId) {
-            hideElement('notes-tab'); hideElement('subjects-tab'); hideElement('schedule-tab');
+        // التنقل والواجهة
+        window.switchTab = function(tabId) {
+            window.hideElement('notes-tab'); window.hideElement('subjects-tab'); window.hideElement('schedule-tab');
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.style.backgroundColor = 'transparent'; btn.style.color = 'var(--text-muted)'; btn.classList.remove('active');
             });
-            showElement(tabId, 'block');
+            window.showElement(tabId, 'block');
             const activeBtn = document.getElementById('btn-' + tabId);
             if(activeBtn) {
                 activeBtn.classList.add('active');
                 activeBtn.style.backgroundColor = 'rgba(138, 180, 248, 0.1)'; 
                 activeBtn.style.color = 'var(--text-main)';
             }
-            if(window.innerWidth < 768) { hideElement('sidebar'); }
-        }
+            if(window.innerWidth < 768) { window.hideElement('sidebar'); }
+        };
 
-        function showNoteActions() { showElement('note-title', 'block'); showElement('note-actions', 'flex'); }
-        function hideNoteActions() { hideElement('note-title'); hideElement('note-actions'); document.getElementById('note-title').value = ''; document.getElementById('note-body').value = ''; document.getElementById('note-body').style.height = ''; }
-        function showSubjectActions() { showElement('subject-extra', 'block'); }
-        function hideSubjectActions() { hideElement('subject-extra'); document.getElementById('subject-name').value = ''; document.getElementById('subject-dept').value = ''; }
-        
-        function openServerModal() {
-            document.getElementById('supa-url').value = localStorage.getItem('supa_url') || "";
-            document.getElementById('supa-key').value = localStorage.getItem('supa_key') || "";
-            showElement('server-modal');
-        }
-
-        function saveServerConfig() {
-            const u = document.getElementById('supa-url').value.trim();
-            const k = document.getElementById('supa-key').value.trim();
-            if(!u || !k) { alert("يرجى إدخال الرابط والمفتاح!"); return; }
-            localStorage.setItem('supa_url', u);
-            localStorage.setItem('supa_key', k);
-            alert("تم حفظ بيانات السيرفر بنجاح، سيتم تحديث الصفحة للاتصال.");
-            window.location.reload();
-        }
-
-        // قواعد البيانات (المذكرات والمواد)
-        async function fetchNotes() {
-            if(!isConfigured || !supabase) return;
+        // وظائف جلب وعرض البيانات (Supabase)
+        window.fetchNotes = async function() {
+            if(!window.isConfigured || !window.supabaseInstance) return;
             try {
-                const { data, error } = await supabase.from('notes').select('*').order('created_at', { ascending: false });
+                const { data, error } = await window.supabaseInstance.from('notes').select('*').order('created_at', { ascending: false });
                 const grid = document.getElementById('notes-grid'); grid.innerHTML = '';
                 if(data && data.length > 0) {
                     data.forEach(d => {
@@ -427,19 +390,19 @@
                         el.innerHTML = `
                             <h3 class="font-bold mb-2">${d.title}</h3><p class="text-sm theme-text-muted whitespace-pre-wrap">${d.body}</p>
                             <div class="keep-card-actions absolute bottom-2 left-2 flex gap-2">
-                                <button onclick="openEditModal('note', '${d.id}', '${safeTitle}', '${safeBody}')" class="w-8 h-8 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 theme-text-muted flex items-center justify-center cursor-pointer"><i class="fa-solid fa-pen text-xs"></i></button>
-                                <button onclick="deleteItem('notes', '${d.id}')" class="w-8 h-8 rounded-full hover:bg-red-100 hover:text-red-500 theme-text-muted flex items-center justify-center cursor-pointer"><i class="fa-solid fa-trash text-xs"></i></button>
+                                <button onclick="window.openEditModal('note', '${d.id}', '${safeTitle}', '${safeBody}')" class="w-8 h-8 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 theme-text-muted flex items-center justify-center cursor-pointer"><i class="fa-solid fa-pen text-xs"></i></button>
+                                <button onclick="window.deleteItem('notes', '${d.id}')" class="w-8 h-8 rounded-full hover:bg-red-100 hover:text-red-500 theme-text-muted flex items-center justify-center cursor-pointer"><i class="fa-solid fa-trash text-xs"></i></button>
                             </div>`;
                         grid.appendChild(el);
                     });
                 } else { grid.innerHTML = "<div class='text-center theme-text-muted py-10 w-full'>لا توجد مذكرات بعد.</div>"; }
             } catch(e) { console.error(e); }
-        }
+        };
 
-        async function fetchSubjects() {
-            if(!isConfigured || !supabase) return;
+        window.fetchSubjects = async function() {
+            if(!window.isConfigured || !window.supabaseInstance) return;
             try {
-                const { data, error } = await supabase.from('subjects').select('*').order('created_at', { ascending: false });
+                const { data, error } = await window.supabaseInstance.from('subjects').select('*').order('created_at', { ascending: false });
                 const grid = document.getElementById('subjects-grid'); grid.innerHTML = '';
                 if(data && data.length > 0) {
                     data.forEach(d => {
@@ -447,75 +410,40 @@
                         const safeDept = (d.department||'').replace(/'/g, "\\'").replace(/"/g, '&quot;');
                         const el = document.createElement('div'); el.className = "keep-card p-4 masonry-item group cursor-pointer flex flex-col";
                         el.innerHTML = `
-                            <div onclick="openSubjectModal('${d.id}', '${safeName}', '${safeDept}')" class="flex-1">
+                            <div onclick="window.openSubjectModal('${d.id}', '${safeName}', '${safeDept}')" class="flex-1">
                                 <h3 class="text-lg font-bold mb-1">${d.name}</h3><span class="text-xs bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded theme-text-muted">${d.department}</span>
                             </div>
                             <div class="keep-card-actions absolute top-2 left-2 flex gap-1">
-                                <button onclick="event.stopPropagation(); openEditModal('subject', '${d.id}', '${safeName}', '${safeDept}')" class="w-7 h-7 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 theme-text-muted cursor-pointer"><i class="fa-solid fa-pen text-xs"></i></button>
-                                <button onclick="event.stopPropagation(); deleteItem('subjects', '${d.id}')" class="w-7 h-7 rounded-full hover:bg-red-100 hover:text-red-500 theme-text-muted cursor-pointer"><i class="fa-solid fa-trash text-xs"></i></button>
+                                <button onclick="event.stopPropagation(); window.openEditModal('subject', '${d.id}', '${safeName}', '${safeDept}')" class="w-7 h-7 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 theme-text-muted cursor-pointer"><i class="fa-solid fa-pen text-xs"></i></button>
+                                <button onclick="event.stopPropagation(); window.deleteItem('subjects', '${d.id}')" class="w-7 h-7 rounded-full hover:bg-red-100 hover:text-red-500 theme-text-muted cursor-pointer"><i class="fa-solid fa-trash text-xs"></i></button>
                             </div>`;
                         grid.appendChild(el);
                     });
                 } else { grid.innerHTML = "<div class='text-center theme-text-muted py-10 w-full'>لا توجد مواد مضافة بعد.</div>"; }
             } catch(e) { console.error(e); }
-        }
+        };
 
-        function initApp() { fetchNotes(); fetchSubjects(); loadSchedule(); }
-
-        async function saveNote() {
-            const t = document.getElementById('note-title').value.trim(), b = document.getElementById('note-body').value.trim();
-            if(!t && !b) return;
+        window.loadSchedule = async function() {
+            if(!window.isConfigured || !window.supabaseInstance) return;
             try {
-                const { error } = await supabase.from('notes').insert([{ title: t, body: b }]);
-                if(!error) { hideNoteActions(); fetchNotes(); } else { alert("حدث خطأ في الإضافة."); }
-            } catch (e) { alert("خطأ في الاتصال"); }
-        }
+                const { data, error } = await window.supabaseInstance.from('schedule').select('*').eq('id', 'main').single();
+                const tbody = document.getElementById('school-timetable-body'); const btn = document.getElementById('download-schedule-btn'); const noPdf = document.getElementById('no-schedule-pdf');
+                tbody.innerHTML = '';
+                
+                let daysData = data ? (data.days || {}) : {};
+                window.daysKeys.forEach(d => { tbody.innerHTML += `<tr><td class="font-bold text-keep-blue">${d.name}</td><td>${daysData[d.id] || '-'}</td></tr>`; });
 
-        async function saveSubject() {
-            const n = document.getElementById('subject-name').value.trim(), d = document.getElementById('subject-dept').value.trim();
-            if(!n) return;
-            try {
-                const { error } = await supabase.from('subjects').insert([{ name: n, department: d }]);
-                if(!error) { hideSubjectActions(); fetchSubjects(); } else { alert("حدث خطأ في الإضافة."); }
-            } catch (e) { alert("خطأ في الاتصال"); }
-        }
-
-        function openEditModal(type, id, val1, val2) {
-            currentEditType = type; currentEditId = id;
-            showElement('edit-item-modal');
-            document.getElementById('edit-modal-title').innerText = type === 'note' ? 'تعديل المذكرة' : 'تعديل المادة';
-            document.getElementById('edit-input-1').value = val1;
-            document.getElementById('edit-input-2').value = val2 || '';
-        }
-
-        async function saveEdit() {
-            const val1 = document.getElementById('edit-input-1').value.trim(), val2 = document.getElementById('edit-input-2').value.trim();
-            if(!val1) return;
-            try {
-                if(currentEditType === 'note') {
-                    await supabase.from('notes').update({ title: val1, body: val2 }).eq('id', currentEditId);
-                    fetchNotes();
-                } else if(currentEditType === 'subject') {
-                    await supabase.from('subjects').update({ name: val1, department: val2 }).eq('id', currentEditId);
-                    fetchSubjects();
+                if(data && data.pdf_url) { 
+                    btn.href = data.pdf_url; window.showElement('download-schedule-btn', 'inline-block'); window.hideElement('no-schedule-pdf'); 
+                } else { 
+                    window.hideElement('download-schedule-btn'); window.showElement('no-schedule-pdf', 'block'); 
                 }
-                hideElement('edit-item-modal');
-            } catch (e) { alert("خطأ في التعديل"); }
-        }
+            } catch (e) { console.error(e); }
+        };
 
-        async function deleteItem(type, id) {
-            if(!confirm('هل أنت متأكد من الحذف النهائي؟')) return;
+        window.fetchSubjectFiles = async function(id) {
             try {
-                const { error } = await supabase.from(type).delete().eq('id', id);
-                if(error) { alert("حدث خطأ أثناء الحذف."); return; }
-                if(type === 'notes') fetchNotes(); else fetchSubjects();
-            } catch (e) { alert("خطأ في الاتصال"); }
-        }
-
-        // ملفات المادة
-        async function fetchSubjectFiles(id) {
-            try {
-                const { data } = await supabase.from('files').select('*').eq('subject_id', id).order('created_at', { ascending: false });
+                const { data } = await window.supabaseInstance.from('files').select('*').eq('subject_id', id).order('created_at', { ascending: false });
                 const list = document.getElementById('subject-files-list'); list.innerHTML = '';
                 if(!data || data.length === 0) { list.innerHTML = "<div class='text-center theme-text-muted w-full py-4'>لا توجد ملفات مرفوعة لهذه المادة.</div>"; return; }
                 data.forEach(d => {
@@ -525,118 +453,227 @@
                             <h4 class="font-bold text-sm truncate">${d.title}</h4>
                             <a href="${d.url}" target="_blank" class="text-xs text-keep-blue hover:underline truncate" dir="ltr">${d.file_name}</a>
                         </div>
-                        <button onclick="deleteFile('${d.id}', '${d.file_path}')" class="text-red-400 hover:text-red-600 p-2 opacity-0 group-hover:opacity-100 transition cursor-pointer"><i class="fa-solid fa-trash"></i></button>`;
+                        <button onclick="window.deleteFile('${d.id}', '${d.file_path}')" class="text-red-400 hover:text-red-600 p-2 opacity-0 group-hover:opacity-100 transition cursor-pointer"><i class="fa-solid fa-trash"></i></button>`;
                     list.appendChild(el);
                 });
             } catch(e) { console.error(e); }
-        }
+        };
 
-        function openSubjectModal(id, name, dept) {
-            currentSubjectId = id;
+        window.initApp = function() { window.fetchNotes(); window.fetchSubjects(); window.loadSchedule(); };
+
+        // وظائف النوافذ (Modals) والحذف
+        window.openEditModal = function(type, id, val1, val2) {
+            window.currentEditType = type; window.currentEditId = id;
+            window.showElement('edit-item-modal');
+            document.getElementById('edit-modal-title').innerText = type === 'note' ? 'تعديل المذكرة' : 'تعديل المادة';
+            document.getElementById('edit-input-1').value = val1; document.getElementById('edit-input-2').value = val2 || '';
+        };
+
+        window.deleteItem = async function(type, id) {
+            if(!confirm('هل أنت متأكد من الحذف النهائي؟')) return;
+            try {
+                const { error } = await window.supabaseInstance.from(type).delete().eq('id', id);
+                if(error) { alert("حدث خطأ أثناء الحذف."); return; }
+                if(type === 'notes') window.fetchNotes(); else window.fetchSubjects();
+            } catch (e) { alert("خطأ في الاتصال"); }
+        };
+
+        window.openSubjectModal = function(id, name, dept) {
+            window.currentSubjectId = id;
             document.getElementById('modal-subject-name').innerText = name; document.getElementById('modal-subject-dept').innerText = dept;
-            showElement('subject-modal');
-            fetchSubjectFiles(id);
-        }
+            window.showElement('subject-modal');
+            window.fetchSubjectFiles(id);
+        };
 
-        async function deleteFile(fileId, filePath) {
-            if(!confirm('هل أنت متأكد من حذف هذا الملف؟ لا يمكن التراجع.')) return;
+        window.deleteFile = async function(fileId, filePath) {
+            if(!confirm('هل أنت متأكد من حذف هذا الملف؟')) return;
             try {
-                await supabase.storage.from('materials').remove([filePath]);
-                await supabase.from('files').delete().eq('id', fileId);
-                fetchSubjectFiles(currentSubjectId);
+                await window.supabaseInstance.storage.from('materials').remove([filePath]);
+                await window.supabaseInstance.from('files').delete().eq('id', fileId);
+                window.fetchSubjectFiles(window.currentSubjectId);
             } catch (e) { alert("خطأ في الحذف"); }
-        }
+        };
 
-        async function uploadFile() {
-            const fileInput = document.getElementById('subject-file-input'); const file = fileInput.files[0];
-            const title = document.getElementById('file-title').value.trim();
-            if(!file || !title) { alert("يرجى اختيار ملف وكتابة وصف له."); return; }
+        // ==========================================
+        // 2. ربط الأحداث بالأزرار (Event Listeners) بصيغة آمنة 100%
+        // ==========================================
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // تهيئة السيرفر
+            window.initSupabase();
 
-            const uploadBtn = document.getElementById('upload-file-btn');
-            showElement('upload-progress-container', 'block');
-            uploadBtn.disabled = true;
+            // الدخول
+            const loginBtn = document.getElementById('login-btn');
+            const pwdInput = document.getElementById('password-input');
+            if(loginBtn) loginBtn.addEventListener('click', window.checkAuth);
+            if(pwdInput) pwdInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') window.checkAuth(); });
 
-            try {
-                const filePath = `subjects/${currentSubjectId}/${Date.now()}_${file.name}`;
-                const { data, error } = await supabase.storage.from('materials').upload(filePath, file);
-                
-                if(error) { 
-                    alert("حدث خطأ بالرفع: " + error.message); 
+            // أزرار الهيدر
+            const themeToggle = document.getElementById('theme-toggle');
+            if(themeToggle) themeToggle.addEventListener('click', () => {
+                document.body.classList.remove('theme-midnight', 'theme-dark', 'theme-light');
+                if(window.currentTheme === 'midnight') { window.currentTheme = 'dark'; document.body.classList.add('theme-dark'); }
+                else if(window.currentTheme === 'dark') { window.currentTheme = 'light'; document.body.classList.add('theme-light'); }
+                else { window.currentTheme = 'midnight'; document.body.classList.add('theme-midnight'); }
+            });
+
+            const viewToggle = document.getElementById('view-toggle');
+            if(viewToggle) viewToggle.addEventListener('click', () => {
+                window.isMobileView = !window.isMobileView;
+                const wrap = document.getElementById('app-wrapper');
+                if(window.isMobileView) wrap.classList.add('mobile-mode'); else wrap.classList.remove('mobile-mode');
+            });
+
+            const menuToggle = document.getElementById('menu-toggle');
+            if(menuToggle) menuToggle.addEventListener('click', () => {
+                const sidebar = document.getElementById('sidebar');
+                if(sidebar.style.display === 'none' || sidebar.classList.contains('hidden-force')) {
+                    sidebar.classList.remove('hidden-force'); sidebar.style.display = 'flex';
                 } else {
-                    const { data: publicData } = supabase.storage.from('materials').getPublicUrl(filePath);
-                    await supabase.from('files').insert([{ subject_id: currentSubjectId, title: title, file_name: file.name, file_path: filePath, url: publicData.publicUrl }]);
-                    fileInput.value = ''; document.getElementById('file-title').value = '';
-                    fetchSubjectFiles(currentSubjectId);
+                    sidebar.classList.add('hidden-force'); sidebar.style.display = 'none';
                 }
-            } catch (e) { alert("خطأ أثناء الرفع."); }
-            
-            hideElement('upload-progress-container');
-            uploadBtn.disabled = false;
-        }
+            });
 
-        // الجدول
-        async function loadSchedule() {
-            if(!isConfigured || !supabase) return;
-            try {
-                const { data, error } = await supabase.from('schedule').select('*').eq('id', 'main').single();
-                const tbody = document.getElementById('school-timetable-body'); const btn = document.getElementById('download-schedule-btn'); const noPdf = document.getElementById('no-schedule-pdf');
-                tbody.innerHTML = '';
+            const serverToggle = document.getElementById('server-toggle');
+            if(serverToggle) serverToggle.addEventListener('click', () => {
+                document.getElementById('supa-url').value = localStorage.getItem('supa_url') || "";
+                document.getElementById('supa-key').value = localStorage.getItem('supa_key') || "";
+                window.showElement('server-modal');
+            });
+
+            // القائمة الجانبية (Tabs)
+            document.getElementById('btn-notes-tab')?.addEventListener('click', () => window.switchTab('notes-tab'));
+            document.getElementById('btn-subjects-tab')?.addEventListener('click', () => window.switchTab('subjects-tab'));
+            document.getElementById('btn-schedule-tab')?.addEventListener('click', () => window.switchTab('schedule-tab'));
+
+            // إضافة مذكرة
+            const noteBodyInput = document.getElementById('note-body');
+            if(noteBodyInput) noteBodyInput.addEventListener('focus', () => { window.showElement('note-title', 'block'); window.showElement('note-actions', 'flex'); });
+            
+            document.getElementById('close-note-btn')?.addEventListener('click', () => { 
+                window.hideElement('note-title'); window.hideElement('note-actions'); 
+                document.getElementById('note-title').value = ''; noteBodyInput.value = ''; noteBodyInput.style.height = ''; 
+            });
+
+            document.getElementById('save-note-btn')?.addEventListener('click', async () => {
+                const t = document.getElementById('note-title').value.trim(), b = noteBodyInput.value.trim();
+                if(!t && !b) return;
+                try {
+                    const { error } = await window.supabaseInstance.from('notes').insert([{ title: t, body: b }]);
+                    if(!error) { document.getElementById('close-note-btn').click(); window.fetchNotes(); } else { alert("حدث خطأ."); }
+                } catch (e) { alert("خطأ بالاتصال"); }
+            });
+
+            // إضافة مادة
+            const subjNameInput = document.getElementById('subject-name');
+            if(subjNameInput) subjNameInput.addEventListener('focus', () => window.showElement('subject-extra', 'block'));
+
+            document.getElementById('close-subject-btn')?.addEventListener('click', () => {
+                window.hideElement('subject-extra'); subjNameInput.value = ''; document.getElementById('subject-dept').value = '';
+            });
+
+            document.getElementById('save-subject-btn')?.addEventListener('click', async () => {
+                const n = subjNameInput.value.trim(), d = document.getElementById('subject-dept').value.trim();
+                if(!n) return;
+                try {
+                    const { error } = await window.supabaseInstance.from('subjects').insert([{ name: n, department: d }]);
+                    if(!error) { document.getElementById('close-subject-btn').click(); window.fetchSubjects(); } else { alert("حدث خطأ."); }
+                } catch (e) { alert("خطأ بالاتصال"); }
+            });
+
+            // نافذة التعديل والحفظ العام
+            document.getElementById('cancel-edit-btn')?.addEventListener('click', () => window.closeModal('edit-item-modal'));
+            
+            document.getElementById('save-edit-btn')?.addEventListener('click', async () => {
+                const val1 = document.getElementById('edit-input-1').value.trim(), val2 = document.getElementById('edit-input-2').value.trim();
+                if(!val1) return;
+                try {
+                    if(window.currentEditType === 'note') {
+                        await window.supabaseInstance.from('notes').update({ title: val1, body: val2 }).eq('id', window.currentEditId);
+                        window.fetchNotes();
+                    } else if(window.currentEditType === 'subject') {
+                        await window.supabaseInstance.from('subjects').update({ name: val1, department: val2 }).eq('id', window.currentEditId);
+                        window.fetchSubjects();
+                    }
+                    window.closeModal('edit-item-modal');
+                } catch (e) { alert("خطأ في التعديل"); }
+            });
+
+            // رفع الملفات للمادة
+            document.getElementById('close-subject-modal-btn')?.addEventListener('click', () => window.closeModal('subject-modal'));
+            
+            document.getElementById('upload-file-btn')?.addEventListener('click', async () => {
+                const fileInput = document.getElementById('subject-file-input'); const file = fileInput.files[0];
+                const title = document.getElementById('file-title').value.trim();
+                if(!file || !title) { alert("يرجى اختيار ملف وكتابة وصف له."); return; }
+
+                const uploadBtn = document.getElementById('upload-file-btn');
+                window.showElement('upload-progress-container', 'block');
+                uploadBtn.disabled = true;
+
+                try {
+                    const filePath = `subjects/${window.currentSubjectId}/${Date.now()}_${file.name}`;
+                    const { data, error } = await window.supabaseInstance.storage.from('materials').upload(filePath, file);
+                    if(error) { 
+                        alert("خطأ بالرفع: " + error.message); 
+                    } else {
+                        const { data: publicData } = window.supabaseInstance.storage.from('materials').getPublicUrl(filePath);
+                        await window.supabaseInstance.from('files').insert([{ subject_id: window.currentSubjectId, title: title, file_name: file.name, file_path: filePath, url: publicData.publicUrl }]);
+                        fileInput.value = ''; document.getElementById('file-title').value = '';
+                        window.fetchSubjectFiles(window.currentSubjectId);
+                    }
+                } catch (e) { alert("خطأ أثناء الرفع."); }
+                window.hideElement('upload-progress-container'); uploadBtn.disabled = false;
+            });
+
+            // الجدول
+            document.getElementById('open-schedule-modal-btn')?.addEventListener('click', async () => {
+                try {
+                    const container = document.getElementById('schedule-inputs-container'); container.innerHTML = '';
+                    const { data } = await window.supabaseInstance.from('schedule').select('*').eq('id', 'main').single();
+                    let daysData = data ? (data.days || {}) : {};
+                    window.daysKeys.forEach(d => {
+                        container.innerHTML += `
+                            <div class="flex flex-col">
+                                <label class="text-xs font-bold theme-text mb-1">${d.name}</label>
+                                <input type="text" id="sch-${d.id}" value="${daysData[d.id] || ''}" class="keep-input border-b theme-border p-1 text-sm" placeholder="محاضرات ${d.name}">
+                            </div>`;
+                    });
+                    window.showElement('schedule-edit-modal');
+                } catch (e) { console.error(e); }
+            });
+
+            document.getElementById('close-schedule-edit-modal')?.addEventListener('click', () => window.closeModal('schedule-edit-modal'));
+
+            document.getElementById('save-schedule-btn')?.addEventListener('click', async () => {
+                const statusBox = document.getElementById('schedule-upload-status'); const file = document.getElementById('schedule-pdf').files[0];
+                const btn = document.getElementById('save-schedule-btn');
+                let daysData = {}; window.daysKeys.forEach(d => daysData[d.id] = document.getElementById(`sch-${d.id}`).value.trim());
+
+                btn.disabled = true; statusBox.innerText = "جاري الحفظ..."; statusBox.className = "text-sm mt-3 text-center text-blue-400";
                 
-                let daysData = data ? (data.days || {}) : {};
-                daysKeys.forEach(d => { tbody.innerHTML += `<tr><td class="font-bold text-keep-blue">${d.name}</td><td>${daysData[d.id] || '-'}</td></tr>`; });
+                try {
+                    let pdfUrl = null;
+                    if(file) {
+                        const filePath = `schedule/${Date.now()}.pdf`;
+                        await window.supabaseInstance.storage.from('materials').upload(filePath, file);
+                        const { data } = window.supabaseInstance.storage.from('materials').getPublicUrl(filePath);
+                        pdfUrl = data.publicUrl;
+                    } else {
+                        const { data } = await window.supabaseInstance.from('schedule').select('pdf_url').eq('id', 'main').single();
+                        if(data) pdfUrl = data.pdf_url;
+                    }
+                    await window.supabaseInstance.from('schedule').upsert({ id: 'main', days: daysData, pdf_url: pdfUrl });
+                    statusBox.innerText = "تم الحفظ بنجاح!"; statusBox.className = "text-sm mt-3 text-center text-green-500";
+                    window.loadSchedule(); setTimeout(() => window.hideElement('schedule-edit-modal'), 1000);
+                } catch(e) { statusBox.innerText = "حدث خطأ أثناء الحفظ."; statusBox.className = "text-sm mt-3 text-center text-red-500"; }
+                btn.disabled = false;
+            });
 
-                if(data && data.pdf_url) { 
-                    btn.href = data.pdf_url; showElement('download-schedule-btn', 'inline-block'); hideElement('no-schedule-pdf'); 
-                } else { 
-                    hideElement('download-schedule-btn'); showElement('no-schedule-pdf', 'block'); 
-                }
-            } catch (e) { console.error(e); }
-        }
-
-        async function openScheduleModal() {
-            try {
-                const container = document.getElementById('schedule-inputs-container'); container.innerHTML = '';
-                const { data } = await supabase.from('schedule').select('*').eq('id', 'main').single();
-                let daysData = data ? (data.days || {}) : {};
-
-                daysKeys.forEach(d => {
-                    container.innerHTML += `
-                        <div class="flex flex-col">
-                            <label class="text-xs font-bold theme-text mb-1">${d.name}</label>
-                            <input type="text" id="sch-${d.id}" value="${daysData[d.id] || ''}" class="keep-input border-b theme-border p-1 text-sm" placeholder="محاضرات ${d.name}">
-                        </div>`;
-                });
-                showElement('schedule-edit-modal');
-            } catch (e) { console.error(e); }
-        }
-
-        async function saveSchedule() {
-            const statusBox = document.getElementById('schedule-upload-status'); const file = document.getElementById('schedule-pdf').files[0];
-            const btn = document.getElementById('save-schedule-btn');
-            
-            let daysData = {}; daysKeys.forEach(d => daysData[d.id] = document.getElementById(`sch-${d.id}`).value.trim());
-
-            btn.disabled = true; statusBox.innerText = "جاري الحفظ..."; statusBox.className = "text-sm mt-3 text-center text-blue-400";
-            
-            try {
-                let pdfUrl = null;
-                if(file) {
-                    const filePath = `schedule/${Date.now()}.pdf`;
-                    await supabase.storage.from('materials').upload(filePath, file);
-                    const { data } = supabase.storage.from('materials').getPublicUrl(filePath);
-                    pdfUrl = data.publicUrl;
-                } else {
-                    const { data } = await supabase.from('schedule').select('pdf_url').eq('id', 'main').single();
-                    if(data) pdfUrl = data.pdf_url;
-                }
-
-                await supabase.from('schedule').upsert({ id: 'main', days: daysData, pdf_url: pdfUrl });
-                statusBox.innerText = "تم الحفظ بنجاح!"; statusBox.className = "text-sm mt-3 text-center text-green-500";
-                loadSchedule(); setTimeout(() => hideElement('schedule-edit-modal'), 1000);
-            } catch(e) { statusBox.innerText = "حدث خطأ أثناء الحفظ."; statusBox.className = "text-sm mt-3 text-center text-red-500"; }
-            
-            btn.disabled = false;
-        }
+            // نافذة السيرفر
+            document.getElementById('close-server-modal-btn')?.addEventListener('click', () => window.closeModal('server-modal'));
+            document.getElementById('save-server-btn')?.addEventListener('click', window.saveServerConfig);
+        });
     </script>
 </body>
 </html>
